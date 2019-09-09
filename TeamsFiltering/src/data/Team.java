@@ -59,7 +59,6 @@ public class Team {
 			this.setTotalTime(currentTotalTime);
 		}
 		
-		//System.out.println("Team total time: " + this.getTotalTime());
 		
 		return true;
 	}
