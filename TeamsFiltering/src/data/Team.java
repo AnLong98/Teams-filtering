@@ -60,7 +60,6 @@ public class Team {
 		}
 		
 		//System.out.println("Team total time: " + this.getTotalTime());
-		//this.calculateTeamAverageTime();
 		
 		return true;
 	}
