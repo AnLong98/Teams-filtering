@@ -1,18 +1,4 @@
-ÔªøBib #,Last Name,First Name,Sex,DOB,State,Team Name,Chip Time
-100,Glava≈°,Predrag,Male,1998,SRB,DAYUMSON,2:20:32
-101,Glava≈°ica,Predragica,Female,1998,SRB,DAYUMSON,DNS
-100,Glava≈°urda,Predragurda,Male,1998,SRB,DAYUMSON,DNS
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
-,,,,,,,
+Bib #,First Name,Last Name,Sex,DOB,State,Team Name,Chip Time
+100,Predrag,Glavaö,Male,1998,SRB,DAYUMSON,2:20:32
+101,Predragica,Glavaöica,Female,1998,SRB,DAYUMSON,DNS
+100,Predragurda,Glavaöurda,Male,1998,SRB,DAYUMSON,DNS

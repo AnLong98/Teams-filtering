@@ -6,7 +6,7 @@ import data.Team;
 
 public class DataUtilities {
 	
-	public static ArrayList<Team> RemoveExtraMembersFromTeams(ArrayList<Team> teams, int validSize)
+	public static ArrayList<Team> removeExtraMembersFromTeams(ArrayList<Team> teams, int validSize)
 	{
 		ArrayList<Team> validTeams = new ArrayList<Team>();
 		
@@ -14,7 +14,10 @@ public class DataUtilities {
 		{
 			boolean isValid = team.TrimTeam(validSize);
 			
-			if(isValid)validTeams.add(team);
+			if (isValid)
+			{
+				validTeams.add(team);
+			}
 		}
 		
 		return validTeams;

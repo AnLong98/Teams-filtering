@@ -1,28 +1,21 @@
 package utilities;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import au.com.bytecode.opencsv.CSVReader;
 import data.Runner;
 import data.Team;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IllegalFormatException;
-import java.util.Iterator;
-import java.util.Scanner;
-
 public class FileUtilities {
-	public enum DATA_FIELDS { BIB, LASTNAME, FIRSTNAME, SEX, DOB, STATE, TEAMNAME, CHIPTIME};
+	public enum DATA_FIELDS { BIB, FIRSTNAME, LASTNAME, SEX, DOB, STATE, TEAMNAME, CHIPTIME };
 	
 	public static ArrayList<Team> ParseCSVFile(File csvFile) throws FileNotFoundException
 	{
@@ -40,7 +33,6 @@ public class FileUtilities {
             //Get the CSVReader instance with specifying the delimiter to be used
             reader = new CSVReader(new FileReader(csvFile),',');
             
-            
             String [] nextLine;
             //Keep this here for now, we don't know if we will need it later
             String[] fileHeader = reader.readNext();
@@ -51,7 +43,6 @@ public class FileUtilities {
             {
             	HashMap<DATA_FIELDS, String> dataMap =  getDataDictFromCSVFileLine(nextLine);
             	String teamName = dataMap.get(DATA_FIELDS.TEAMNAME);
-            	
             	
             	//If runner has no team he is to be ignored
             	if(teamName.isEmpty())
@@ -72,39 +63,41 @@ public class FileUtilities {
             		currentTeam = new Team(teamName);
             		currentTeam.AddRunnerToTeam(currentRunner);
             		
-            	}else if(teamName.equals(currentTeam.getTeamName()))
+            	}
+            	else if(teamName.equals(currentTeam.getTeamName()))
             	{
             		//If parsed runner is member of the same team as last parsed runner put him there
             		currentTeam.AddRunnerToTeam(currentRunner);
             		
-            	}else if( !teamName.equals(currentTeam.getTeamName()) )
+            	}
+            	else if( !teamName.equals(currentTeam.getTeamName()) )
             	{
             		//If we reached a new team then add old one to the list
             		teams.add(currentTeam);
             		currentTeam = new Team(teamName);
             		currentTeam.AddRunnerToTeam(currentRunner);
-            	}
-            	
-            	
-
+            	}	
             }
             //Add the last parsed team
             teams.add(currentTeam);
         }
-        catch (Exception e) {
+        catch (Exception e) 
+        {
             e.printStackTrace();
         }
-        finally {
-            try {
+        finally 
+        {
+            try 
+            {
                 reader.close();
-            } catch (IOException e) {
+            } catch (IOException e) 
+            {
                 e.printStackTrace();
             }
         }
         
         return teams;
 	}
-	
 	
 	public static HashMap<DATA_FIELDS, String> getDataDictFromCSVFileLine(String[] line)
 	{
@@ -115,8 +108,8 @@ public class FileUtilities {
 		
 		HashMap<DATA_FIELDS, String> dataMap= new HashMap<DATA_FIELDS, String>();
 		dataMap.put(DATA_FIELDS.BIB, line[0]);
-		dataMap.put(DATA_FIELDS.LASTNAME, line[1]);
-		dataMap.put(DATA_FIELDS.FIRSTNAME, line[2]);
+		dataMap.put(DATA_FIELDS.FIRSTNAME, line[1]);
+		dataMap.put(DATA_FIELDS.LASTNAME, line[2]);
 		dataMap.put(DATA_FIELDS.SEX, line[3]);
 		dataMap.put(DATA_FIELDS.DOB, line[4]);
 		dataMap.put(DATA_FIELDS.STATE, line[5]);
@@ -128,26 +121,23 @@ public class FileUtilities {
 	
 	public static Runner ParseRunnerFromDataDict(HashMap<DATA_FIELDS, String> dataDict)
 	{
-		
 		LocalTime localTime;
-		
 		
 		try
 		{
-			
 			localTime = LocalTime.parse(dataDict.get(DATA_FIELDS.CHIPTIME), DateTimeFormatter.ofPattern("H:mm:ss"));
-
-		}catch(DateTimeParseException dtpe)
+		}
+		catch(DateTimeParseException dtpe)
 		{
 			try
 			{
 				localTime = LocalTime.parse(dataDict.get(DATA_FIELDS.CHIPTIME), DateTimeFormatter.ofPattern("HH:mm:ss"));
-			}catch(DateTimeParseException dtpe_2)
+			}
+			catch(DateTimeParseException dtpe_2)
 			{
 				//This probably means he is unqualified
 				return null;
-			}
-			
+			}	
 		}
 		catch(Exception e)
 		{
@@ -161,10 +151,8 @@ public class FileUtilities {
 				Integer.parseInt(dataDict.get(DATA_FIELDS.BIB)),
 				dataDict.get(DATA_FIELDS.SEX).charAt(0),
 				localTime);
-		return runner;
 		
-
-
+		return runner;
 	}
 	
 	

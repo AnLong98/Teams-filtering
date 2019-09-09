@@ -1,5 +1,6 @@
 package data;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -14,6 +15,8 @@ public class Team {
 		super();
 		this.teamName = teamName;
 		this.teamMembers  = new ArrayList<Runner>();
+		this.averageTime = LocalTime.MIDNIGHT; 	// (00:00:00) zavisi sta nam je lepse
+		this.totalTime = LocalTime.MIDNIGHT;	// LocalTime.parse("00:00:00")
 	}
 	
 	public boolean TrimTeam(int newSize)
@@ -36,28 +39,84 @@ public class Team {
 	{
 		teamMembers.add(runner);
 	}
+
+	public boolean calculateTeamTotalTime() 
+	{
+		if (this.getTeamMembers().size() == 0)
+		{
+			return false;
+		}
+		
+		for (Runner teamMember : this.getTeamMembers())
+		{
+			LocalTime runnerTime = teamMember.getChipTime();
+			LocalTime currentTotalTime = this.getTotalTime();
+			
+			currentTotalTime = currentTotalTime.plusSeconds(runnerTime.getSecond());
+			currentTotalTime = currentTotalTime.plusMinutes(runnerTime.getMinute());
+			currentTotalTime = currentTotalTime.plusHours(runnerTime.getHour());
+			
+			this.setTotalTime(currentTotalTime);
+		}
+		
+		//System.out.println("Team total time: " + this.getTotalTime());
+		//this.calculateTeamAverageTime();
+		
+		return true;
+	}
+	
+	public boolean calculateTeamAverageTime() 
+	{
+		if (this.getTotalTime() == LocalTime.MIDNIGHT)
+		{
+			return false;
+		}
+		
+		Duration totalTime = Duration.between(LocalTime.MIDNIGHT, this.getTotalTime());
+		Duration dividedTotalTime = totalTime.dividedBy(this.getTeamMembers().size());
+		LocalTime calculatedAverageTime = LocalTime.ofNanoOfDay(dividedTotalTime.toNanos()); 
+		
+		this.setAverageTime(calculatedAverageTime);
+		
+		//System.out.println("Team average time: " + this.getAverageTime());
+		
+		return true;
+	}
 	
 	public String getTeamName() {
 		return teamName;
 	}
+	
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
-	public ArrayList<Runner> getTeamMembers() {
+	
+	public ArrayList<Runner> getTeamMembers() 
+	{
+		if (this.teamMembers == null)
+		{
+			this.teamMembers = new ArrayList<Runner>();
+		}
+		
 		return teamMembers;
 	}
+	
 	public void setTeamMembers(ArrayList<Runner> teamMembers) {
 		this.teamMembers = teamMembers;
 	}
+	
 	public LocalTime getAverageTime() {
 		return averageTime;
 	}
+	
 	public void setAverageTime(LocalTime averageTime) {
 		this.averageTime = averageTime;
 	}
+	
 	public LocalTime getTotalTime() {
 		return totalTime;
 	}
+	
 	public void setTotalTime(LocalTime totalTime) {
 		this.totalTime = totalTime;
 	}
