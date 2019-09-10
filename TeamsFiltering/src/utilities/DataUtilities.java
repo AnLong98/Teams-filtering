@@ -46,5 +46,41 @@ public class DataUtilities {
 		
 		return time;
 	}
+	
+	public static String formatCSVOutputTime(LocalTime localTime)
+	{
+		int hours = localTime.getHour();
+		int minutes = localTime.getMinute();
+		int seconds = localTime.getSecond();
+		
+		String formattedTime = "";
+		String delmiter = ":";
+		
+		if(hours < 10)
+		{
+			formattedTime += "0";
+			
+		}
+		formattedTime += String.valueOf(hours);
+		formattedTime += delmiter;
+		
+		if(minutes < 10)
+		{
+			formattedTime += "0";
+			
+		}
+		formattedTime += String.valueOf(minutes);
+		formattedTime += delmiter;
+		
+		if(seconds < 10)
+		{
+			formattedTime += "0";
+			
+		}
+		formattedTime += String.valueOf(seconds);
+		
+		return formattedTime;
+
+	}
 
 }
