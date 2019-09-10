@@ -32,7 +32,7 @@ public class FileUtilitiesTests {
 	@Test
 	public void Test__getDataDictFromCSVFileLine__assert_content() {
 		
-		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female",	"1983",	"SRB", "adidas runners beograd", "3:20:52"};
+		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", "3:20:52"};
 		
 		HashMap<DATA_FIELDS, String> returnValue = FileUtilities.getDataDictFromCSVFileLine(dataLine);
 		
