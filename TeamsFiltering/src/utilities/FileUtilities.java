@@ -2,8 +2,11 @@ package utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -11,11 +14,84 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.CSVWriter;
 import data.Runner;
 import data.Team;
 
 public class FileUtilities {
 	public enum DATA_FIELDS { BIB, FIRSTNAME, LASTNAME, SEX, DOB, STATE, TEAMNAME, CHIPTIME };
+	public static String[] outputCSVHeader = { "Place", "Bib #", "First Name", "Last Name", "Sex",
+						"YoB", "Country", "Team Name", "Time", "Average Time", "Total Time" };
+	
+	public static boolean writeCSVFile(ArrayList<Team> teams, String fileName)
+	{	
+		boolean ret = false;
+		String csvFileName = fileName + ".csv";
+		
+		// File input path
+        //System.out.println("Starting....");
+        try 
+        {
+        	PrintWriter output = new PrintWriter(new File(csvFileName));
+        	//File fileDir = new File(csvFileName);
+        	//PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileDir), "UTF8"));
+            CSVWriter csvWriter = new CSVWriter(output);
+
+            // Header column value
+            csvWriter.writeNext(outputCSVHeader);
+            
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+            
+            int place = 0;
+            
+            for(Team team : teams)
+            {
+            	place++;
+            	boolean firstRunnerInTeam = true;
+            	
+            	for(Runner runner: team.getTeamMembers())
+            	{
+            		// String[] runnerString = DataUtilities.runnerToCSVString(runner);
+            		
+            		if(firstRunnerInTeam)
+            		{
+            			String[] csvString = { String.valueOf(place), String.valueOf(runner.getBib_number()),
+                				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+                				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
+                				team.getAverageTime().toString(), team.getTotalTime().format(timeFormatter) };
+            			
+            			firstRunnerInTeam = false;
+            			csvWriter.writeNext(csvString);
+            		}else
+            		{
+            			String[] csvString = { "", String.valueOf(runner.getBib_number()),
+                				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+                				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
+                				"", "" };
+                		
+                		csvWriter.writeNext(csvString);
+            		}
+            		
+            	}
+            	
+            	//System.out.println(team.getAverageTime());
+        		//System.out.println(team.getTotalTime());
+            }
+            
+            csvWriter.close();
+            
+            ret = true;
+        } 
+        catch (Exception e) 
+        {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+        //System.out.println("End.");
+		
+		return ret;
+	}
 	
 	public static ArrayList<Team> ParseCSVFile(File csvFile) throws FileNotFoundException
 	{
@@ -148,14 +224,13 @@ public class FileUtilities {
 		Runner runner = new Runner(dataDict.get(DATA_FIELDS.FIRSTNAME),
 				dataDict.get(DATA_FIELDS.LASTNAME),
 				dataDict.get(DATA_FIELDS.STATE),
+				dataDict.get(DATA_FIELDS.DOB),
 				Integer.parseInt(dataDict.get(DATA_FIELDS.BIB)),
-				dataDict.get(DATA_FIELDS.SEX).charAt(0),
+				dataDict.get(DATA_FIELDS.SEX),
 				localTime);
 		
 		return runner;
 	}
-	
-	
 	
 	/*static ArrayList<Team> ParseFile(File xslxFile)
 	{
