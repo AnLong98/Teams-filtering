@@ -40,16 +40,39 @@ public class DataUtilities {
 		return time;
 	}
 	
-	public static ArrayList<Team> sortByTotalTime(ArrayList<Team> teams) {
+	public static String formatCSVOutputTime(LocalTime localTime)
+	{
+		int hours = localTime.getHour();
+		int minutes = localTime.getMinute();
+		int seconds = localTime.getSecond();
 		
-		Collections.sort(teams, new Comparator<Team>() {
-			@Override
-		    public int compare(Team team1, Team team2) {
-		        return team1.getTotalTime().compareTo(team2.getTotalTime());
-		    }
-		});
+		String formattedTime = "";
+		String delmiter = ":";
 		
-		return teams;
+		if(hours < 10)
+		{
+			formattedTime += "0";
+		}
+
+		formattedTime += String.valueOf(hours);
+		formattedTime += delmiter;
+		
+		if(minutes < 10)
+		{
+			formattedTime += "0";
+			
+		}
+		formattedTime += String.valueOf(minutes);
+		formattedTime += delmiter;
+		
+		if(seconds < 10)
+		{
+			formattedTime += "0";
+		}
+
+		formattedTime += String.valueOf(seconds);
+		
+		return formattedTime;
 	}
 
 }

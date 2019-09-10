@@ -137,5 +137,16 @@ public class DataUtilitiesTests {
 		
 		assertEquals(0, returnValue.getNano());
 	}
+	
+	@Test
+	public void formatCSVOutputTime_singleDigitValues__assertContent()
+	{
+		LocalTime timeToRound = LocalTime.parse("03:05:09");
+		
+		String returnValue = DataUtilities.formatCSVOutputTime(timeToRound);
+		String expectedValue = "03:05:09";
+		
+		assertEquals(expectedValue, returnValue);
+	}
 
 }

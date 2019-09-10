@@ -7,10 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -38,44 +40,15 @@ public class FileUtilities {
             CSVWriter csvWriter = new CSVWriter(output);
 
             // Header column value
-            csvWriter.writeNext(outputCSVHeader);
-            
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
-            
-            int place = 0;
-            
+            csvWriter.writeNext(outputCSVHeader);           
+       
             for(Team team : teams)
             {
-            	place++;
-            	boolean firstRunnerInTeam = true;
-            	
-            	for(Runner runner: team.getTeamMembers())
+            	for(String[] csvRowData : getCSVDataFromTeam(team))
             	{
-            		// String[] runnerString = DataUtilities.runnerToCSVString(runner);
-            		
-            		if(firstRunnerInTeam)
-            		{
-            			String[] csvString = { String.valueOf(place), String.valueOf(runner.getBib_number()),
-                				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-                				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
-                				team.getAverageTime().toString(), team.getTotalTime().format(timeFormatter) };
-            			
-            			firstRunnerInTeam = false;
-            			csvWriter.writeNext(csvString);
-            		}else
-            		{
-            			String[] csvString = { "", String.valueOf(runner.getBib_number()),
-                				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-                				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
-                				"", "" };
-                		
-                		csvWriter.writeNext(csvString);
-            		}
-            		
+            		csvWriter.writeNext(csvRowData);
             	}
             	
-            	//System.out.println(team.getAverageTime());
-        		//System.out.println(team.getTotalTime());
             }
             
             csvWriter.close();
@@ -92,6 +65,46 @@ public class FileUtilities {
 		
 		return ret;
 	}
+	
+	
+	public static ArrayList<String[]> getCSVDataFromTeam(Team team)
+	{
+		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
+		
+		int place = 0;
+
+        place++;
+        boolean firstRunnerInTeam = true;
+        	
+        for(Runner runner: team.getTeamMembers())
+        {
+        		
+        	if(firstRunnerInTeam)
+        	{
+        		String[] csvString = { String.valueOf(place), String.valueOf(runner.getBib_number()),
+            			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+            			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(runner.getChipTime()),
+            			DataUtilities.formatCSVOutputTime(team.getAverageTime()), DataUtilities.formatCSVOutputTime(team.getTotalTime())};
+        			
+        		firstRunnerInTeam = false;
+        		csvTeamData.add(csvString);
+        	}else
+        	{
+        		String[] csvString = { "", String.valueOf(runner.getBib_number()),
+            			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+            			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(runner.getChipTime()),
+            			"", "" };
+            		
+        		csvTeamData.add(csvString);
+        	}
+        		
+        }
+        
+        return csvTeamData;
+		
+	}
+	
 	
 	public static ArrayList<Team> ParseCSVFile(File csvFile) throws FileNotFoundException
 	{
@@ -197,7 +210,34 @@ public class FileUtilities {
 	
 	public static Runner ParseRunnerFromDataDict(HashMap<DATA_FIELDS, String> dataDict)
 	{
+		SimpleDateFormat formatLonger = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat formatShorter = new SimpleDateFormat("yyyy");
 		LocalTime localTime;
+		String birthYear = "";
+		String firstName = dataDict.get(DATA_FIELDS.FIRSTNAME);
+		String lastName = dataDict.get(DATA_FIELDS.LASTNAME);
+		String state = dataDict.get(DATA_FIELDS.STATE);
+		String sex = dataDict.get(DATA_FIELDS.SEX).substring(0, 1);
+		int bibNumber = Integer.parseInt(dataDict.get(DATA_FIELDS.BIB));
+		
+		try
+		{
+			Date date = formatLonger.parse(dataDict.get(DATA_FIELDS.DOB));
+			birthYear = formatShorter.format(date);
+		}catch(Exception e)
+		{
+			try
+			{
+				birthYear = dataDict.get(DATA_FIELDS.DOB);
+
+			}catch(Exception ex)
+			{
+				//Totaly illegal format, something is wrong
+				return null;
+			}
+		}
+		
+		
 		
 		try
 		{
@@ -221,12 +261,12 @@ public class FileUtilities {
 			return null;
 		}
 		
-		Runner runner = new Runner(dataDict.get(DATA_FIELDS.FIRSTNAME),
-				dataDict.get(DATA_FIELDS.LASTNAME),
-				dataDict.get(DATA_FIELDS.STATE),
-				dataDict.get(DATA_FIELDS.DOB),
-				Integer.parseInt(dataDict.get(DATA_FIELDS.BIB)),
-				dataDict.get(DATA_FIELDS.SEX),
+		Runner runner = new Runner(firstName,
+				lastName,
+				state,
+				birthYear,
+				bibNumber,
+				sex,
 				localTime);
 		
 		return runner;
