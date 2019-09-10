@@ -283,20 +283,35 @@ public class FileUtilitiesTests {
 		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1);
 		
 
-		String[] receivedData  = csvData.get(0);
-		String[] expectedData = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Test team" , "02:20:32", "02:20:34", "09:22:14"};
+		String[] receivedDataFirst  = csvData.get(0);
+		String[] expectedDataFirst = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Test team" , "02:20:32", "02:20:34", "09:22:14"};
 		
-		assertEquals(receivedData[0], expectedData[0]);
-		assertEquals(receivedData[1], expectedData[1]);
-		assertEquals(receivedData[2], expectedData[2]);
-		assertEquals(receivedData[3], expectedData[3]);
-		assertEquals(receivedData[4], expectedData[4]);
-		assertEquals(receivedData[5], expectedData[5]);
-		assertEquals(receivedData[6], expectedData[6]);
-		assertEquals(receivedData[7], expectedData[7]);
-		assertEquals(receivedData[8], expectedData[8]);
-		assertEquals(receivedData[9], expectedData[9]);
-		assertEquals(receivedData[10], expectedData[10]);
+		String[] receivedDataSecond  = csvData.get(1);
+		String[] expectedDataSecond = {"", "101","Predragica", "Glavašica", "M", "1997", "SRB", "Test team" , "02:20:33", "", ""};
+		
+		assertEquals(expectedDataFirst[0], receivedDataFirst[0]);
+		assertEquals(expectedDataFirst[1], receivedDataFirst[1]);
+		assertEquals(expectedDataFirst[2], receivedDataFirst[2]);
+		assertEquals(expectedDataFirst[3], receivedDataFirst[3]);
+		assertEquals(expectedDataFirst[4], receivedDataFirst[4]);
+		assertEquals(expectedDataFirst[5], receivedDataFirst[5]);
+		assertEquals(expectedDataFirst[6], receivedDataFirst[6]);
+		assertEquals(expectedDataFirst[7], receivedDataFirst[7]);
+		assertEquals(expectedDataFirst[8], receivedDataFirst[8]);
+		assertEquals(expectedDataFirst[9], receivedDataFirst[9]);
+		assertEquals(expectedDataFirst[10], receivedDataFirst[10]);
+		
+		assertEquals(expectedDataSecond[0], receivedDataSecond[0]);
+		assertEquals(expectedDataSecond[1], receivedDataSecond[1]);
+		assertEquals(expectedDataSecond[2], receivedDataSecond[2]);
+		assertEquals(expectedDataSecond[3], receivedDataSecond[3]);
+		assertEquals(expectedDataSecond[4], receivedDataSecond[4]);
+		assertEquals(expectedDataSecond[5], receivedDataSecond[5]);
+		assertEquals(expectedDataSecond[6], receivedDataSecond[6]);
+		assertEquals(expectedDataSecond[7], receivedDataSecond[7]);
+		assertEquals(expectedDataSecond[8], receivedDataSecond[8]);
+		assertEquals(expectedDataSecond[9], receivedDataSecond[9]);
+		assertEquals(expectedDataSecond[10], receivedDataSecond[10]);
 		
 	}
 	

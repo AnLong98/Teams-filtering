@@ -31,12 +31,11 @@ public class FileUtilities {
 		String csvFileName = fileName + ".csv";
 		
 		// File input path
-        //System.out.println("Starting....");
+
         try 
         {
         	PrintWriter output = new PrintWriter(new File(csvFileName));
-        	//File fileDir = new File(csvFileName);
-        	//PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileDir), "UTF8"));
+
             CSVWriter csvWriter = new CSVWriter(output);
 
             // Header column value
@@ -61,7 +60,7 @@ public class FileUtilities {
             e.printStackTrace();
         }
 
-        //System.out.println("End.");
+
 		
 		return ret;
 	}
