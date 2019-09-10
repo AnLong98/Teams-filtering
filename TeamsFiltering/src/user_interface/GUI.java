@@ -105,7 +105,6 @@ public class GUI extends JFrame {
 		    int returnVal = fileChooser.showSaveDialog(GUI.this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION)
 		    {			    	
-		    	txtFieldInputFileName.setText(fileChooser.getSelectedFile().getName());
 		    	outputFile = fileChooser.getSelectedFile();
 		    	ArrayList<Team> teams = null;
 				try {
@@ -114,6 +113,7 @@ public class GUI extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 		    	teams = DataUtilities.removeExtraMembersFromTeams(teams, (Integer) spinnerRunnerCount.getValue());
 		    	teams = DataUtilities.sortByTotalTime(teams);
 		    	FileUtilities.writeCSVFile(teams, outputFile.getAbsolutePath());

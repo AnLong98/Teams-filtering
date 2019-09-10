@@ -17,6 +17,7 @@ public class DataUtilities {
 		
 		for (Team team : teams)
 		{
+
 			boolean isValid = team.TrimTeam(validSize);
 			
 			if (isValid)

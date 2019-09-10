@@ -113,6 +113,7 @@ public class FileUtilities {
 		//Check if file is empty
 		if (csvFile.length() == 0)
 		{
+			System.out.println("Prazan sam");
 			return null;
 		}
 		
