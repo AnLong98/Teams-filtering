@@ -2,8 +2,9 @@ package utilities;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-import data.Runner;
 import data.Team;
 
 public class DataUtilities {
@@ -27,14 +28,6 @@ public class DataUtilities {
 		return validTeams;
 	}
 	
-	public static String[] runnerToCSVString(Runner r) 
-	{
-		String[] ret = { String.valueOf(r.getBib_number()), String.valueOf(r.getFirstName()),
-				String.valueOf(r.getLastName()) };
-		
-		return ret;
-	}
-	
 	public static LocalTime roundSeconds(LocalTime time) {
 		
 		if (time.getNano() >= nanoBound) 
@@ -45,6 +38,18 @@ public class DataUtilities {
 		time = time.minusNanos(time.getNano());
 		
 		return time;
+	}
+	
+	public static ArrayList<Team> sortByTotalTime(ArrayList<Team> teams) {
+		
+		Collections.sort(teams, new Comparator<Team>() {
+			@Override
+		    public int compare(Team team1, Team team2) {
+		        return team1.getTotalTime().compareTo(team2.getTotalTime());
+		    }
+		});
+		
+		return teams;
 	}
 
 }
