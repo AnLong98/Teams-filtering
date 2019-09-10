@@ -28,7 +28,7 @@ public class FileUtilities {
 	public static boolean writeCSVFile(ArrayList<Team> teams, String fileName)
 	{	
 		boolean ret = false;
-		String csvFileName = fileName + ".csv";
+		String csvFileName = fileName;
 		
 		// File input path
         //System.out.println("Starting....");
@@ -70,7 +70,6 @@ public class FileUtilities {
 	public static ArrayList<String[]> getCSVDataFromTeam(Team team)
 	{
 		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();
-		DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
 		
 		int place = 0;
 

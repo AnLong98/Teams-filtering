@@ -4,6 +4,8 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -16,7 +18,11 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import controller.ChooseFileAction;
 import controller.ProcessDataAction;
+import data.Team;
+import utilities.DataUtilities;
+import utilities.FileUtilities;
 
 public class GUI extends JFrame {
 
@@ -26,7 +32,7 @@ public class GUI extends JFrame {
 	private JPanel panel;
 	private JLabel lblRunnerCount, lblInputFileName;
 	private JFileChooser fileChooser;
-	private File choosenFile;
+	private File choosenFile, outputFile;
 
 	/**
 	 * Create the application.
@@ -64,20 +70,7 @@ public class GUI extends JFrame {
 		
 		btnProcessData = new JButton("Obradi podatke");
 		btnProcessData.addActionListener(new ProcessDataAction());
-		
-		/*new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(choosenFile == null)
-				{
-					JOptionPane.showMessageDialog(mainWindow, "Nema izabranog fajla za obradu");
-				}
-				else
-				{
-					//TODO: ADD function calls here
-				}
-				
-			}
-		});*/
+
 		btnProcessData.setBounds(174, 130, 125, 23);
 		panel.add(btnProcessData);
 		
@@ -88,32 +81,14 @@ public class GUI extends JFrame {
 		txtFieldInputFileName.setColumns(10);
 		
 		btnChooseFile = new JButton("Izaberi ulazni fajl");
-		btnChooseFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				fileChooser = new JFileChooser();
-				fileChooser.setAcceptAllFileFilterUsed(false);
-			    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			        "CSV File", "csv");
-			    fileChooser.setFileFilter(filter);
-			    int returnVal = fileChooser.showOpenDialog(GUI.this);
-			    if(returnVal == JFileChooser.APPROVE_OPTION)
-			    {			    	
-			    	txtFieldInputFileName.setText(fileChooser.getSelectedFile().getName());
-			    	choosenFile = fileChooser.getSelectedFile();
-			    }else
-			    {
-			    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
-			    	txtFieldInputFileName.setText("");
-			    	choosenFile = null;
-			    }
-			}
-		});
+		btnChooseFile.addActionListener(new ChooseFileAction());
 		btnChooseFile.setToolTipText("Klikni ovde da izabere\u0161 novi fajl");
 		btnChooseFile.setBounds(319, 27, 148, 23);
 		panel.add(btnChooseFile);
 		
 		setVisible(true);
 	}
+
 	
 	public void processDataAction() {
 		if(choosenFile == null)
@@ -122,12 +97,55 @@ public class GUI extends JFrame {
 		}
 		else
 		{
-			//TODO: ADD function calls here
-			JOptionPane.showMessageDialog(GUI.this, "jedem govna, ali uspesno!");
-			System.out.println("pedjurda glavurda");
+			fileChooser = new JFileChooser();
+			fileChooser.setAcceptAllFileFilterUsed(false);
+		    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		        "CSV File", "csv");
+		    fileChooser.setFileFilter(filter);
+		    int returnVal = fileChooser.showSaveDialog(GUI.this);
+		    if(returnVal == JFileChooser.APPROVE_OPTION)
+		    {			    	
+		    	txtFieldInputFileName.setText(fileChooser.getSelectedFile().getName());
+		    	outputFile = fileChooser.getSelectedFile();
+		    	ArrayList<Team> teams = null;
+				try {
+					teams = FileUtilities.ParseCSVFile(choosenFile);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    	teams = DataUtilities.removeExtraMembersFromTeams(teams, (Integer) spinnerRunnerCount.getValue());
+		    	teams = DataUtilities.sortByTotalTime(teams);
+		    	FileUtilities.writeCSVFile(teams, outputFile.getAbsolutePath());
+		    }else
+		    {
+		    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
+
+		    }
 		}
 	}
+	
+	
+	public void chooseFile() {
+		fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+	        "CSV File", "csv");
+	    fileChooser.setFileFilter(filter);
+	    int returnVal = fileChooser.showOpenDialog(GUI.this);
+	    if(returnVal == JFileChooser.APPROVE_OPTION)
+	    {			    	
+	    	txtFieldInputFileName.setText(fileChooser.getSelectedFile().getName());
+	    	choosenFile = fileChooser.getSelectedFile();
+	    }else
+	    {
+	    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
+	    	txtFieldInputFileName.setText("");
+	    	choosenFile = null;
+	    }
+	}
 
+	
 	public JTextField getTxtFieldInputFileName() {
 		return txtFieldInputFileName;
 	}
