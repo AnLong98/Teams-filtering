@@ -16,9 +16,10 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class GUI {
+import controller.ProcessDataAction;
 
-	private JFrame mainWindow;
+public class GUI extends JFrame {
+
 	private JTextField txtFieldInputFileName;
 	private JButton btnChooseFile, btnProcessData;
 	private JSpinner spinnerRunnerCount;
@@ -38,15 +39,14 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		mainWindow = new JFrame();
-		mainWindow.setResizable(false);
-		mainWindow.setTitle("Neki fensi naziv");
-		mainWindow.setBounds(100, 100, 477, 227);
-		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainWindow.getContentPane().setLayout(new CardLayout(0, 0));
+		setResizable(false);
+		setTitle("Neki fensi naziv");
+		setBounds(100, 100, 477, 227);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new CardLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		mainWindow.getContentPane().add(panel, "name_758619713253");
+		getContentPane().add(panel, "name_758619713253");
 		panel.setLayout(null);
 		
 		spinnerRunnerCount = new JSpinner();
@@ -63,18 +63,21 @@ public class GUI {
 		panel.add(lblInputFileName);
 		
 		btnProcessData = new JButton("Obradi podatke");
-		btnProcessData.addActionListener(new ActionListener() {
+		btnProcessData.addActionListener(new ProcessDataAction());
+		
+		/*new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(choosenFile == null)
 				{
 					JOptionPane.showMessageDialog(mainWindow, "Nema izabranog fajla za obradu");
-				}else
+				}
+				else
 				{
 					//TODO: ADD function calls here
 				}
 				
 			}
-		});
+		});*/
 		btnProcessData.setBounds(174, 130, 125, 23);
 		panel.add(btnProcessData);
 		
@@ -108,17 +111,21 @@ public class GUI {
 		btnChooseFile.setToolTipText("Klikni ovde da izabere\u0161 novi fajl");
 		btnChooseFile.setBounds(319, 27, 148, 23);
 		panel.add(btnChooseFile);
-		mainWindow.setVisible(true);
 		
-		
+		setVisible(true);
 	}
 	
-	public JFrame getMainWindow() {
-		return mainWindow;
-	}
-
-	public void setMainWindow(JFrame mainWindow) {
-		this.mainWindow = mainWindow;
+	public void processDataAction() {
+		if(choosenFile == null)
+		{
+			JOptionPane.showMessageDialog(this, "Nema izabranog fajla za obradu");
+		}
+		else
+		{
+			//TODO: ADD function calls here
+			JOptionPane.showMessageDialog(this, "jedem govna, ali uspesno!");
+			System.out.println("pedjurda glavurda");
+		}
 	}
 
 	public JTextField getTxtFieldInputFileName() {
@@ -177,6 +184,5 @@ public class GUI {
 	public void setLblInputFileName(JLabel lblInputFileName) {
 		this.lblInputFileName = lblInputFileName;
 	}
-
 
 }
