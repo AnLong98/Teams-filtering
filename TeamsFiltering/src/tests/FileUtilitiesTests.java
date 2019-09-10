@@ -12,7 +12,9 @@ import org.junit.Test;
 
 import data.Runner;
 import data.Team;
+import utilities.DataUtilities;
 import utilities.FileUtilities;
+import utilities.TeamsForTest;
 import utilities.FileUtilities.DATA_FIELDS;
 
 public class FileUtilitiesTests {
@@ -30,12 +32,12 @@ public class FileUtilitiesTests {
 	@Test
 	public void Test__getDataDictFromCSVFileLine__assert_content() {
 		
-		String[] dataLine = {"110",	"Nataša", "Naletina", "Female",	"1983",	"SRB", "adidas runners beograd", "3:20:52"};
+		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", "3:20:52"};
 		
 		HashMap<DATA_FIELDS, String> returnValue = FileUtilities.getDataDictFromCSVFileLine(dataLine);
 		
 		assertEquals(returnValue.get(DATA_FIELDS.BIB), "110");
-		assertEquals(returnValue.get(DATA_FIELDS.FIRSTNAME), "Nataša");
+		assertEquals(returnValue.get(DATA_FIELDS.FIRSTNAME), "NataÅ¡a");
 		assertEquals(returnValue.get(DATA_FIELDS.LASTNAME), "Naletina");
 		assertEquals(returnValue.get(DATA_FIELDS.SEX), "Female");
 		assertEquals(returnValue.get(DATA_FIELDS.DOB), "1983");
@@ -47,12 +49,12 @@ public class FileUtilitiesTests {
 	@Test
 	public void Test__getDataDictFromCSVFileLine__empty_field__assert_content(){
 		
-		String[] dataLine = {"110",	"Nataša", "Naletina", "Female",	"1983",	"SRB", " ", "3:20:52"};
+		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female",	"1983",	"SRB", " ", "3:20:52"};
 		
 		HashMap<DATA_FIELDS, String> returnValue = FileUtilities.getDataDictFromCSVFileLine(dataLine);
 		
 		assertEquals(returnValue.get(DATA_FIELDS.BIB), "110");
-		assertEquals(returnValue.get(DATA_FIELDS.FIRSTNAME), "Nataša");
+		assertEquals(returnValue.get(DATA_FIELDS.FIRSTNAME), "NataÅ¡a");
 		assertEquals(returnValue.get(DATA_FIELDS.LASTNAME), "Naletina");
 		assertEquals(returnValue.get(DATA_FIELDS.SEX), "Female");
 		assertEquals(returnValue.get(DATA_FIELDS.DOB), "1983");
@@ -68,7 +70,7 @@ public class FileUtilitiesTests {
 		
 		dataDict.put(DATA_FIELDS.BIB, "110");
 		dataDict.put(DATA_FIELDS.LASTNAME, "Naletina");
-		dataDict.put(DATA_FIELDS.FIRSTNAME, "Nataša");
+		dataDict.put(DATA_FIELDS.FIRSTNAME, "NataÅ¡a");
 		dataDict.put(DATA_FIELDS.SEX, "Female");
 		dataDict.put(DATA_FIELDS.DOB, "1983");
 		dataDict.put(DATA_FIELDS.STATE, "SRB");
@@ -93,7 +95,7 @@ public class FileUtilitiesTests {
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
 		dataDict.put(DATA_FIELDS.BIB, "110");
-		dataDict.put(DATA_FIELDS.FIRSTNAME, "Nataša");
+		dataDict.put(DATA_FIELDS.FIRSTNAME, "NataÅ¡a");
 		dataDict.put(DATA_FIELDS.LASTNAME, "Naletina");
 		dataDict.put(DATA_FIELDS.SEX, "Female");
 		dataDict.put(DATA_FIELDS.DOB, "1983");
@@ -119,7 +121,7 @@ public class FileUtilitiesTests {
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
 		dataDict.put(DATA_FIELDS.BIB, "110");
-		dataDict.put(DATA_FIELDS.FIRSTNAME, "Nataša");
+		dataDict.put(DATA_FIELDS.FIRSTNAME, "NataÅ¡a");
 		dataDict.put(DATA_FIELDS.LASTNAME, "Naletina");
 		dataDict.put(DATA_FIELDS.SEX, "Female");
 		dataDict.put(DATA_FIELDS.DOB, "1983");
@@ -206,7 +208,7 @@ public class FileUtilitiesTests {
 	@Test
 	public void Test__ParseCSVFile__team_with_one_qualified_runner__assert_runner_info()
 	{
-		Runner expectedRunner = new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "Male", LocalTime.of(2, 20, 32));
+		Runner expectedRunner = new Runner("Predrag", "GlavaÅ¡", "SRB", "1998", 100, "Male", LocalTime.of(2, 20, 32));
 		
 		try 
 		{
@@ -228,43 +230,28 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void writeCSVFile_nesto_returnsTrue()
+	public void writeCSVFile_sortedTeams_returnsTrue()
 	{
 		ArrayList<Team> teams = new ArrayList<Team>();
 		
-		Team team1 = new Team("Test team");
+		Team team1 = TeamsForTest.createPedjaTeam();
+		Team team2 = TeamsForTest.createEstradaTeam();
+		Team team3 = TeamsForTest.createTrkaRsTeam();
 		
-		team1.AddRunnerToTeam(new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32)));
-		team1.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "M", LocalTime.of(2, 20, 33)));
-		team1.AddRunnerToTeam(new Runner("Predragurda", "Glavašurda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34)));
-		team1.AddRunnerToTeam(new Runner("Predragetina", "Glavašetina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35)));
-		team1.AddRunnerToTeam(new Runner("Predrager", "Glavašer", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36)));
-		team1.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "M", LocalTime.of(2, 20, 37)));
-		
-		team1.TrimTeam(4);
-		team1.calculateTeamTotalTime();
-		team1.calculateTeamAverageTime();
-		teams.add(team1);
-		
-		Team team2 = new Team("Feminisam");
-		
-		team2.AddRunnerToTeam(new Runner("Наташа", "Бекалац", "SRB", "1982", 200, "F", LocalTime.parse("02:40:30")));
-		team2.AddRunnerToTeam(new Runner("Marina", "Višković", "SRB", "1988", 201, "F", LocalTime.parse("02:42:30")));
-		team2.AddRunnerToTeam(new Runner("Fahreta", "Živojinović", "SRB", "1958", 202, "F", LocalTime.parse("02:44:30")));
-		team2.AddRunnerToTeam(new Runner("Radojka", "Adžić", "SRB", "1977", 203, "F", LocalTime.parse("02:45:35")));
-		team2.AddRunnerToTeam(new Runner("Marina", "Gavrić", "SRB", "1996", 204, "F", LocalTime.parse("02:46:36")));
-		team2.AddRunnerToTeam(new Runner("Anastasija", "Rudan", "SRB", "1996", 205, "F", LocalTime.parse("02:48:37")));
-		
-		team2.TrimTeam(4);
-		team2.calculateTeamTotalTime();
-		team2.calculateTeamAverageTime();
 		teams.add(team2);
+		teams.add(team1);
+		teams.add(team3);
+		
+		//System.out.println(team1.getAverageTime());
+		//System.out.println(team1.getTotalTime());
+		
+		teams = DataUtilities.sortByTotalTime(teams);
 		
 		assertTrue(FileUtilities.writeCSVFile(teams, "test"));
 	}
 	
 	@Test
-	public void writeCSVFile_TestTeam_assertContent()
+	public void writeCSVFile_testTeam_assertContent()
 	{
 		
 		Team team1 = new Team("Test team");
@@ -299,7 +286,5 @@ public class FileUtilitiesTests {
 		assertEquals(receivedData[10], expectedData[10]);
 		
 	}
-	
-	
 
 }
