@@ -95,14 +95,14 @@ public class GUI extends JFrame {
 			    FileNameExtensionFilter filter = new FileNameExtensionFilter(
 			        "CSV File", "csv");
 			    fileChooser.setFileFilter(filter);
-			    int returnVal = fileChooser.showOpenDialog(mainWindow);
+			    int returnVal = fileChooser.showOpenDialog(GUI.this);
 			    if(returnVal == JFileChooser.APPROVE_OPTION)
 			    {			    	
 			    	txtFieldInputFileName.setText(fileChooser.getSelectedFile().getName());
 			    	choosenFile = fileChooser.getSelectedFile();
 			    }else
 			    {
-			    	JOptionPane.showMessageDialog(mainWindow, "Niste izabrali fajl");
+			    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
 			    	txtFieldInputFileName.setText("");
 			    	choosenFile = null;
 			    }
@@ -118,12 +118,12 @@ public class GUI extends JFrame {
 	public void processDataAction() {
 		if(choosenFile == null)
 		{
-			JOptionPane.showMessageDialog(this, "Nema izabranog fajla za obradu");
+			JOptionPane.showMessageDialog(GUI.this, "Nema izabranog fajla za obradu");
 		}
 		else
 		{
 			//TODO: ADD function calls here
-			JOptionPane.showMessageDialog(this, "jedem govna, ali uspesno!");
+			JOptionPane.showMessageDialog(GUI.this, "jedem govna, ali uspesno!");
 			System.out.println("pedjurda glavurda");
 		}
 	}
