@@ -188,7 +188,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void writeCSVFile_teams_returnsTrue()
+	public void writeCSVFile_sortedTeams_returnsTrue()
 	{
 		ArrayList<Team> teams = new ArrayList<Team>();
 		
@@ -199,6 +199,9 @@ public class FileUtilitiesTests {
 		teams.add(team2);
 		teams.add(team1);
 		teams.add(team3);
+		
+		//System.out.println(team1.getAverageTime());
+		//System.out.println(team1.getTotalTime());
 		
 		teams = DataUtilities.sortByTotalTime(teams);
 		
