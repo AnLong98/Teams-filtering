@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import utilities.DataUtilities;
+
 public class Team {
 
 	private String teamName;
@@ -72,7 +74,15 @@ public class Team {
 		
 		Duration totalTime = Duration.between(LocalTime.MIDNIGHT, this.getTotalTime());
 		Duration dividedTotalTime = totalTime.dividedBy(this.getTeamMembers().size());
-		LocalTime calculatedAverageTime = LocalTime.ofNanoOfDay(dividedTotalTime.toNanos()); 
+		LocalTime calculatedAverageTime = LocalTime.ofNanoOfDay(dividedTotalTime.toNanos());
+		
+		//System.out.println("second before: " + calculatedAverageTime.getSecond());
+		//System.out.println("nano before: " + calculatedAverageTime.getNano());
+		
+		calculatedAverageTime = DataUtilities.roundSeconds(calculatedAverageTime);
+		
+		//System.out.println("second after: " + calculatedAverageTime.getSecond());
+		//System.out.println("nano after: " + calculatedAverageTime.getNano());
 		
 		this.setAverageTime(calculatedAverageTime);
 		
