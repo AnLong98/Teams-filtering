@@ -43,18 +43,35 @@ public class FileUtilities {
             DateTimeFormatter timeFormatter = DateTimeFormatter.ISO_LOCAL_TIME;
             
             int place = 0;
+            
             for(Team team : teams)
             {
             	place++;
+            	boolean firstRunnerInTeam = true;
+            	
             	for(Runner runner: team.getTeamMembers())
             	{
             		// String[] runnerString = DataUtilities.runnerToCSVString(runner);
-            		String[] csvString = { String.valueOf(place), String.valueOf(runner.getBib_number()),
-            				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-            				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
-            				team.getAverageTime().toString(), team.getTotalTime().format(timeFormatter) };
             		
-            		csvWriter.writeNext(csvString);
+            		if(firstRunnerInTeam)
+            		{
+            			String[] csvString = { String.valueOf(place), String.valueOf(runner.getBib_number()),
+                				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+                				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
+                				team.getAverageTime().toString(), team.getTotalTime().format(timeFormatter) };
+            			
+            			firstRunnerInTeam = false;
+            			csvWriter.writeNext(csvString);
+            		}else
+            		{
+            			String[] csvString = { "", String.valueOf(runner.getBib_number()),
+                				runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+                				runner.getState(), team.getTeamName(), String.valueOf(runner.getChipTime()),
+                				"", "" };
+                		
+                		csvWriter.writeNext(csvString);
+            		}
+            		
             	}
             	
             	//System.out.println(team.getAverageTime());
