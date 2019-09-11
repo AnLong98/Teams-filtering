@@ -90,7 +90,6 @@ public class GUI extends JFrame {
 		
 		setVisible(true);
 	}
-
 	
 	public void processDataAction() {
 		if(choosenFile == null)
@@ -99,29 +98,23 @@ public class GUI extends JFrame {
 										"Nema izabranog fajla za obradu");
 		}
 		else
-		{
-			if (choosenFile instanceof File)
-			{
-
-			}
-			
+		{	
 			int runnersInTeam = (int) spinnerRunnerCount.getValue();
-
 			ArrayList<Team> parsedTeams = null;
+			
 			try 
 			{
 				parsedTeams = FileUtilities.ParseCSVFile(choosenFile);
-				
-			} catch (FileNotFoundException fne) 
+			} 
+			catch (FileNotFoundException fne) 
 			{
-
 				fne.printStackTrace();
-				JOptionPane.showMessageDialog(GUI.this, "Traženi fajl nije pronađen ili ne može biti otvoren!");
-				return;
-				
-			} catch (IllegalInputHeaderException iihe) 
+				JOptionPane.showMessageDialog(GUI.this, "Traženi fajl nije pronađen ili"
+						+ "\n" + "ne može biti otvoren!");
+				return;	
+			} 
+			catch (IllegalInputHeaderException iihe) 
 			{
-
 				iihe.printStackTrace();
 				JOptionPane.showMessageDialog(GUI.this, "Zaglavlje izabranog fajla nije podržano!");
 				return;
@@ -129,16 +122,14 @@ public class GUI extends JFrame {
 			
 			if (parsedTeams != null) 
 			{
-				
 				if (parsedTeams.size() > 0) 
 				{
 					ArrayList<Team> trimmedTeams = DataUtilities.removeExtraMembersFromTeams(parsedTeams, runnersInTeam);
-					
-					for(Team team : trimmedTeams) {
+					for(Team team : trimmedTeams) 
+					{
 						team.calculateTeamTotalTime();
 						team.calculateTeamAverageTime();
 					}
-					
 					
 					ArrayList<Team> sortedTeams = DataUtilities.sortByTotalTime(trimmedTeams);
 
@@ -173,7 +164,6 @@ public class GUI extends JFrame {
 			}
 		}
 	}
-	
 	
 	public void chooseFileAction() 
 	{

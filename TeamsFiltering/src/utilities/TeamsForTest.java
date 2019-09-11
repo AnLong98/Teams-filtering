@@ -11,12 +11,12 @@ public class TeamsForTest {
 	{
 		Team team = new Team("Pedja team");
 		
-		team.AddRunnerToTeam(new Runner("Predrag", "GlavaÅ¡", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32)));
-		team.AddRunnerToTeam(new Runner("Predragica", "GlavaÅ¡ica", "SRB", "1997", 101, "M", LocalTime.of(2, 20, 33)));
-		team.AddRunnerToTeam(new Runner("Predragurda", "GlavaÅ¡urda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34)));
-		team.AddRunnerToTeam(new Runner("Predragetina", "GlavaÅ¡etina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35)));
-		team.AddRunnerToTeam(new Runner("Predrager", "GlavaÅ¡er", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36)));
-		team.AddRunnerToTeam(new Runner("Predraga", "GlavaÅ¡a", "SRB", "1993", 105, "M", LocalTime.of(2, 20, 37)));
+		team.AddRunnerToTeam(new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32)));
+		team.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "M", LocalTime.of(2, 20, 33)));
+		team.AddRunnerToTeam(new Runner("Predragurda", "Glavašurda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34)));
+		team.AddRunnerToTeam(new Runner("Predragetina", "Glavašetina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35)));
+		team.AddRunnerToTeam(new Runner("Predrager", "Glavašer", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36)));
+		team.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "M", LocalTime.of(2, 20, 37)));
 		
 		team.TrimTeam(4);
 		team.calculateTeamTotalTime();

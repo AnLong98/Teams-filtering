@@ -21,7 +21,7 @@ import utilities.FileUtilities.DATA_FIELDS;
 public class FileUtilitiesTests {
 
 	@Test
-	public void Test__getDataDictFromCSVFileLine__empty_line_returns_null() {
+	public void getDataDictFromCSVFileLine_emptyLine_returnsNull() {
 		
 		String[] emptyLine = {};
 		
@@ -31,7 +31,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__getDataDictFromCSVFileLine__assert_content() {
+	public void getDataDictFromCSVFileLine_content_assertContent() {
 		
 		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", "3:20:52"};
 		
@@ -48,9 +48,9 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__getDataDictFromCSVFileLine__leadingWhitespaces__assert_content() {
+	public void getDataDictFromCSVFileLine_leadingWhitespaces_assertContent() {
 		
-		String[] dataLine = {" 110",	"NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", " 3:20:52"};
+		String[] dataLine = {" 110", "NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", " 3:20:52"};
 		
 		HashMap<DATA_FIELDS, String> returnValue = FileUtilities.getDataDictFromCSVFileLine(dataLine);
 		
@@ -65,7 +65,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__getDataDictFromCSVFileLine__empty_field__assert_content(){
+	public void getDataDictFromCSVFileLine_emptyField_assertContent(){
 		
 		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female",	"1983",	"SRB", " ", "3:20:52"};
 		
@@ -82,7 +82,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__assert_content()
+	public void parseRunnerFromDataDict_runner_assertContent()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -106,7 +106,6 @@ public class FileUtilitiesTests {
 		assertEquals(expectedValue.getGender(), returnedValue.getGender());
 		assertEquals(expectedValue.getState(), returnedValue.getState());
 	}
-	
 	
 	@Test
 	public void parseRunnerFromDataDict_hhmmssTimeFormat_assertContent()
@@ -269,17 +268,16 @@ public class FileUtilitiesTests {
 	@Test
 	public void getCSVDataFromTeam_testTeam_assertContent()
 	{
-		
 		Team team1 = TeamsForTest.createPedjaTeam();
 		int place = 1;
+		
 		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1, place);
 		
-
 		String[] receivedDataFirst  = csvData.get(0);
-		String[] expectedDataFirst = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Test team" , "02:20:32", "02:20:34", "09:22:14"};
+		String[] expectedDataFirst = {"1", "100","Predrag", "Glava�", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};
 		
 		String[] receivedDataSecond  = csvData.get(1);
-		String[] expectedDataSecond = {"", "101","Predragica", "Glavašica", "M", "1997", "SRB", "Test team" , "02:20:33", "", ""};
+		String[] expectedDataSecond = {"", "101","Predragica", "Glava�ica", "M", "1997", "SRB", "Pedja team" , "02:20:33", "", ""};
 		
 		assertEquals(expectedDataFirst[0], receivedDataFirst[0]);
 		assertEquals(expectedDataFirst[1], receivedDataFirst[1]);
@@ -303,26 +301,63 @@ public class FileUtilitiesTests {
 		assertEquals(expectedDataSecond[7], receivedDataSecond[7]);
 		assertEquals(expectedDataSecond[8], receivedDataSecond[8]);
 		assertEquals(expectedDataSecond[9], receivedDataSecond[9]);
-		assertEquals(expectedDataSecond[10], receivedDataSecond[10]);
-		
+		assertEquals(expectedDataSecond[10], receivedDataSecond[10]);	
 	}
 	
 	@Test
-	public void ComnpareFileHeaders_Whitespaces_returnsTrue()
+	public void compareFileHeaders_inputTeamsHeader_returnsTrue()
 	{
-		String[] firstHeader = { "Bib #" , "First Name" , "Last Name" , "Sex" ,"DOB" , "State" , "Team Name", "Chip Time" };
-		String[] secondHeader = { " Bib #" , " First Name" , " Last Name" , " Sex" ," DOB" , " State" , " Team Name", " Chip Time" };
+		String[] firstHeader = { "Bib #", "First Name", "Last Name", "Sex", "DOB", "State", "Team Name", "Chip Time" };
 		
-		assertTrue(FileUtilities.CompareFileHeaders(firstHeader, secondHeader));
+		assertTrue(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
 	}
 	
 	@Test
-	public void ComnpareFileHeaders_nbsps_returnsTrue()
+	public void compareFileHeaders_notSupportedInputTeamsHeader_returnsFalse()
 	{
-		String[] firstHeader = { "Bib #" , "First Name" , "Last Name" , "Sex" ,"DOB" , "State" , "Team Name", "Chip Time" };
-		String[] secondHeader = { "\u00A0Bib #" , "\u00A0First Name" , "\u00A0Last Name" , "\u00A0Sex" ,"\u00A0DOB" , "\u00A0State" , "\u00A0Team Name", "\u00A0Chip Time" };
+		String[] firstHeader = { "Bib #", "Last Name", "First Name", "Sex", "DOB", "State", "Team Name", "Chip Time" };
 		
-		assertTrue(FileUtilities.CompareFileHeaders(firstHeader, secondHeader));
+		assertFalse(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+	}
+	
+	@Test
+	public void compareFileHeaders_inputTeamsHeaderWithWhitespaces_returnsTrue()
+	{
+		String[] firstHeader = { " Bib #", " First Name", " Last Name", " Sex", " DOB", " State", " Team Name", " Chip Time" };
+		
+		assertTrue(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+	}
+	
+	@Test
+	public void compareFileHeaders_inputTeamsHeaderWithNBSPS_returnsTrue()
+	{
+		String[] firstHeader = { "\u00A0Bib #" , "\u00A0First Name" , "\u00A0Last Name" , "\u00A0Sex" ,"\u00A0DOB" , "\u00A0State" , "\u00A0Team Name", "\u00A0Chip Time" };
+		
+		assertTrue(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+	}
+	
+	@Test
+	public void compareFileHeaders_inputTeamsCommaHeader_returnsTrue()
+	{
+		String[] firstHeader = { "Bib #", "First Name", "Last Name", "Sex", "DOB", "State", "Team Name", "Chip Time", "" };
+		
+		assertTrue(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsCommaHeader));
+	}
+	
+	@Test
+	public void compareFileHeaders_inputTeamsCommaHeaderWithWhitespaces_returnsTrue()
+	{
+		String[] firstHeader = { " Bib #" , " First Name" , " Last Name" , " Sex" ," DOB" , " State" , " Team Name", " Chip Time", " " };
+		
+		assertTrue(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsCommaHeader));
+	}
+	
+	@Test
+	public void compareFileHeaders_inputTeamsCommaHeaderWithNBSPS_returnsTrue()
+	{
+		String[] firstHeader = { "\u00A0Bib #" , "\u00A0First Name" , "\u00A0Last Name" , "\u00A0Sex" ,"\u00A0DOB" , "\u00A0State" , "\u00A0Team Name", "\u00A0Chip Time", "\u00A0" };
+		
+		assertTrue(FileUtilities.compareFileHeaders(firstHeader, FileUtilities.inputTeamsCommaHeader));
 	}
 
 }

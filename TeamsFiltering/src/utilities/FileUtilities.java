@@ -6,13 +6,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -27,7 +25,11 @@ public class FileUtilities {
 	public static String[] outputCSVHeader = { "Place", "Bib #", "First Name", "Last Name", "Sex",
 						"YoB", "Country", "Team Name", "Time", "Average Time", "Total Time" };
 	
-	public static String[] inputTeamsHeader = { "Bib #" , "First Name" , "Last Name" , "Sex" ,"DOB" , "State" , "Team Name", "Chip Time" };
+	public static String[] inputTeamsHeader = { "Bib #", "First Name", "Last Name", "Sex",
+						"DOB", "State", "Team Name", "Chip Time" };
+	
+	public static String[] inputTeamsCommaHeader = { "Bib #", "First Name", "Last Name", "Sex",
+						"DOB", "State", "Team Name", "Chip Time", "" };
 	
 	public static boolean writeCSVFile(ArrayList<Team> teams, String fileName)
 	{	
@@ -114,64 +116,67 @@ public class FileUtilities {
 			return null;
 		}
 		
-
         //Get the CSVReader instance with specifying the delimiter to be used
         reader = new CSVReader(new FileReader(csvFile),',');
             
         String [] nextLine;
          //Keep this here for now, we don't know if we will need it later
         String[] fileHeader;
-        try {
-				fileHeader = reader.readNext();
-				
-	            if(!CompareFileHeaders(inputTeamsHeader, fileHeader))throw new IllegalInputHeaderException(fileHeader);
-	            //Read one line at a time
-	            
-	            Team currentTeam = null;
-	            while ((nextLine = reader.readNext()) != null)
-	            {
-	            	HashMap<DATA_FIELDS, String> dataMap =  getDataDictFromCSVFileLine(nextLine);
-	            	String teamName = dataMap.get(DATA_FIELDS.TEAMNAME);
-	            	
-	            	//If runner has no team he is to be ignored
-	            	if(teamName.isEmpty() || teamName == null)
-	            	{
-	            		continue;
-	            	}
-	            	
-	            	Runner currentRunner = ParseRunnerFromDataDict(dataMap);
-	            	//This person is invalid we need to skip it
-	            	if(currentRunner == null)
-	            	{
-	            		continue;
-	            	}
-	            	
-	            	//We need to create a new team cause current is non existent
-	            	if(currentTeam == null)
-	            	{
-	            		currentTeam = new Team(teamName);
-	            		currentTeam.AddRunnerToTeam(currentRunner);
-	            	}
-	            	else if(teamName.equals(currentTeam.getTeamName()))
-	            	{
-	            		//If parsed runner is member of the same team as last parsed runner put him there
-	            		currentTeam.AddRunnerToTeam(currentRunner);	
-	            	}
-	            	else if( !teamName.equals(currentTeam.getTeamName()) )
-	            	{
-	            		//If we reached a new team then add old one to the list
-	            		teams.add(currentTeam);
-	            		currentTeam = new Team(teamName);
-	            		currentTeam.AddRunnerToTeam(currentRunner);
-	            	}	
-	            }
-	            //Add the last parsed team
-	            teams.add(currentTeam);
-        } catch (IOException e1) {
+        try 
+        {
+			fileHeader = reader.readNext();
 			
+            if(!compareFileHeaders(inputTeamsHeader, fileHeader) && !compareFileHeaders(inputTeamsCommaHeader, fileHeader))
+            	throw new IllegalInputHeaderException(fileHeader);
+            
+            Team currentTeam = null;
+          //Read one line at a time
+            while ((nextLine = reader.readNext()) != null)
+            {
+            	HashMap<DATA_FIELDS, String> dataMap =  getDataDictFromCSVFileLine(nextLine);
+            	String teamName = dataMap.get(DATA_FIELDS.TEAMNAME);
+            	
+            	//If runner has no team he is to be ignored
+            	if(teamName.isEmpty() || teamName == null)
+            	{
+            		continue;
+            	}
+            	
+            	Runner currentRunner = ParseRunnerFromDataDict(dataMap);
+            	//This person is invalid we need to skip it
+            	if(currentRunner == null)
+            	{
+            		continue;
+            	}
+            	
+            	//We need to create a new team cause current is non existent
+            	if(currentTeam == null)
+            	{
+            		currentTeam = new Team(teamName);
+            		currentTeam.AddRunnerToTeam(currentRunner);
+            	}
+            	else if(teamName.equals(currentTeam.getTeamName()))
+            	{
+            		//If parsed runner is member of the same team as last parsed runner put him there
+            		currentTeam.AddRunnerToTeam(currentRunner);	
+            	}
+            	else if( !teamName.equals(currentTeam.getTeamName()) )
+            	{
+            		//If we reached a new team then add old one to the list
+            		teams.add(currentTeam);
+            		currentTeam = new Team(teamName);
+            		currentTeam.AddRunnerToTeam(currentRunner);
+            	}	
+            }
+            //Add the last parsed team
+            teams.add(currentTeam);
+        } 
+        catch (IOException e1) 
+        {
 			e1.printStackTrace();
 			return null;
-		}finally
+		}
+        finally
         {
 			try 
             {
@@ -180,10 +185,8 @@ public class FileUtilities {
             {
                 e.printStackTrace();
             }
-			
         }
             
-
         return teams;
 	}
 	
@@ -223,21 +226,20 @@ public class FileUtilities {
 		{
 			Date date = formatLonger.parse(dataDict.get(DATA_FIELDS.DOB));
 			birthYear = formatShorter.format(date);
-		}catch(Exception e)
+		}
+		catch(Exception e)
 		{
 			try
 			{
 				birthYear = dataDict.get(DATA_FIELDS.DOB);
-
-			}catch(Exception ex)
+			}
+			catch(Exception ex)
 			{
 				//Totaly illegal format, something is wrong
 				return null;
 			}
 		}
-		
-		
-		
+
 		try
 		{
 			localTime = LocalTime.parse(dataDict.get(DATA_FIELDS.CHIPTIME), DateTimeFormatter.ofPattern("H:mm:ss"));
@@ -271,10 +273,11 @@ public class FileUtilities {
 		return runner;
 	}
 	
-	public static boolean CompareFileHeaders(String[] firstHeader, String[] secondHeader)
+	public static boolean compareFileHeaders(String[] firstHeader, String[] secondHeader)
 	{
 		
-		if(firstHeader.length != secondHeader.length)return false;
+		if (firstHeader.length != secondHeader.length)
+			return false;
 		
 		for(int i = 0; i < firstHeader.length; i++)
 		{
