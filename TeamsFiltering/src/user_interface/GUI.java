@@ -1,10 +1,6 @@
 package user_interface;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -33,7 +29,7 @@ public class GUI extends JFrame {
 	private JSpinner spinnerRunnerCount;
 	private JPanel panel;
 	private JLabel lblRunnerCount, lblInputFileName;
-	private JFileChooser fileChooser;
+	private JFileChooser fileChooser, outputFileChooser;
 	private File choosenFile, outputFile;
 
 	/**
@@ -113,21 +109,26 @@ public class GUI extends JFrame {
 			System.out.println(runnersInTeam);
 			
 			ArrayList<Team> parsedTeams = null;
-			try {
+			try 
+			{
 				parsedTeams = FileUtilities.ParseCSVFile(choosenFile);
 				System.out.println("uspeo sam da parsiram");
-			} catch (FileNotFoundException e) {
+			} catch (FileNotFoundException e) 
+			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (Exception e1) {
+			} catch (Exception e1) 
+			{
 				System.out.println("neki drugi exception prilikom parsiranja");
 			}
 			
 			System.out.println("okej sad idemo dalje...");
-			if (parsedTeams != null) {
+			if (parsedTeams != null) 
+			{
 				System.out.println("Nakon parsiranja ulaznog fajla, "
 						+ "pronasao sam: " + parsedTeams.size() + " timova!");
-				if (parsedTeams.size() > 0) {
+				if (parsedTeams.size() > 0) 
+				{
 					ArrayList<Team> trimmedTeams = DataUtilities.removeExtraMembersFromTeams(parsedTeams, runnersInTeam);
 					System.out.println("Nakon trimovanja, pronasao sam: "
 							+ trimmedTeams.size() + " timova!");
@@ -143,41 +144,40 @@ public class GUI extends JFrame {
 						System.out.println(t.getTeamName() + " - Total Time: " + t.getTotalTime());
 					}
 					System.out.println("Sve je kako treba...");
-					FileUtilities.writeCSVFile(sortedTeams, "primer");
+					
+					// **********************************
+					System.out.println("pre filechooser-a");
+					
+					outputFileChooser = new JFileChooser();
+					outputFileChooser.setCurrentDirectory(new java.io.File("."));
+					outputFileChooser.setDialogTitle("Save as");
+					outputFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					outputFileChooser.setAcceptAllFileFilterUsed(false);
+					
+					int returnVal = outputFileChooser.showSaveDialog(GUI.this);
+					if (returnVal == JFileChooser.APPROVE_OPTION)
+					{
+						String outputFilePath = outputFileChooser.getCurrentDirectory().getAbsolutePath();
+						String outputFileName = outputFileChooser.getSelectedFile().getName();
+						String outputFileString = outputFilePath + "\\" + outputFileName;
+						
+						FileUtilities.writeCSVFile(sortedTeams, outputFileString);
+						JOptionPane.showMessageDialog(GUI.this, "Obrađen fajl je sačuvan na sledećoj lokaciji:"
+								+ "\n" + outputFilePath);
+					}
+					else
+				    {
+				    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali putanju za čuvanje"
+				    			+ "\n" + "obrađenog fajla!");
+				    }
 				}
-			} else {
+			} 
+			else 
+			{
 				System.out.println("teams je null :(");
+				JOptionPane.showMessageDialog(GUI.this, "Došlo je do greške pri učitavanju"
+		    			+ "\n" + "timova iz ulaznog fajla!");
 			}
-			
-			/*
-			fileChooser = new JFileChooser();
-			fileChooser.setAcceptAllFileFilterUsed(false);
-		    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-		    										"CSV File", "csv");
-		    fileChooser.setFileFilter(filter);
-		    
-		    int returnVal = fileChooser.showSaveDialog(GUI.this);
-		    if(returnVal == JFileChooser.APPROVE_OPTION)
-		    {			    	
-		    	outputFile = fileChooser.getSelectedFile();
-		    	ArrayList<Team> teams = null;
-				try {
-					teams = FileUtilities.ParseCSVFile(choosenFile);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-		    	teams = DataUtilities.removeExtraMembersFromTeams(teams, (Integer) spinnerRunnerCount.getValue());
-		    	teams = DataUtilities.sortByTotalTime(teams);
-		    	FileUtilities.writeCSVFile(teams, outputFile.getAbsolutePath());
-		    }
-		    else
-		    {
-		    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
-
-		    }
-		    */
 		}
 	}
 	

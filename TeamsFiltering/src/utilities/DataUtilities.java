@@ -60,7 +60,6 @@ public class DataUtilities {
 		if(minutes < 10)
 		{
 			formattedTime += "0";
-			
 		}
 		
 		formattedTime += String.valueOf(minutes);
@@ -78,7 +77,6 @@ public class DataUtilities {
 
 	public static ArrayList<Team> sortByTotalTime(ArrayList<Team> teams) 
 	{
-		
 		Collections.sort(teams, new Comparator<Team>() 
 		{
 		    @Override
