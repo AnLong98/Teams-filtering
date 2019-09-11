@@ -1,5 +1,7 @@
 package user_interface;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,11 +58,12 @@ public class GUI extends JFrame {
 		panel.setLayout(null);
 		
 		spinnerRunnerCount = new JSpinner();
-		spinnerRunnerCount.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
+		spinnerRunnerCount.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
 		spinnerRunnerCount.setBounds(216, 74, 68, 20);
 		panel.add(spinnerRunnerCount);
 		
-		lblRunnerCount = new JLabel("Broj takmi\u010Dara po timu");
+		lblRunnerCount = new JLabel("Takmičara:");
+		lblRunnerCount.setToolTipText("Broj takmičara u okviru tima");
 		lblRunnerCount.setBounds(32, 77, 148, 14);
 		panel.add(lblRunnerCount);
 		
@@ -68,8 +71,9 @@ public class GUI extends JFrame {
 		lblInputFileName.setBounds(32, 31, 68, 14);
 		panel.add(lblInputFileName);
 		
-		btnProcessData = new JButton("Obradi podatke");
+		btnProcessData = new JButton("Obradi");
 		btnProcessData.addActionListener(new ProcessDataAction());
+		btnProcessData.setToolTipText("Klikni ovde za obradu podataka");
 
 		btnProcessData.setBounds(174, 130, 125, 23);
 		panel.add(btnProcessData);
@@ -80,9 +84,9 @@ public class GUI extends JFrame {
 		panel.add(txtFieldInputFileName);
 		txtFieldInputFileName.setColumns(10);
 		
-		btnChooseFile = new JButton("Izaberi ulazni fajl");
+		btnChooseFile = new JButton("Izaberi");
 		btnChooseFile.addActionListener(new ChooseFileAction());
-		btnChooseFile.setToolTipText("Klikni ovde da izabere\u0161 novi fajl");
+		btnChooseFile.setToolTipText("Klikni ovde da izabereš fajl za obradu");
 		btnChooseFile.setBounds(319, 27, 148, 23);
 		panel.add(btnChooseFile);
 		
@@ -93,15 +97,65 @@ public class GUI extends JFrame {
 	public void processDataAction() {
 		if(choosenFile == null)
 		{
-			JOptionPane.showMessageDialog(GUI.this, "Nema izabranog fajla za obradu");
+			JOptionPane.showMessageDialog(GUI.this, 
+										"Nema izabranog fajla za obradu");
 		}
 		else
 		{
+			System.out.println("Imam fajl za obradu...");
+			if (choosenFile instanceof File)
+			{
+				System.out.println(choosenFile.getName() + ": je fajl");
+			}
+			
+			System.out.println(spinnerRunnerCount.getValue());
+			int runnersInTeam = (int) spinnerRunnerCount.getValue();
+			System.out.println(runnersInTeam);
+			
+			ArrayList<Team> parsedTeams = null;
+			try {
+				parsedTeams = FileUtilities.ParseCSVFile(choosenFile);
+				System.out.println("uspeo sam da parsiram");
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e1) {
+				System.out.println("neki drugi exception prilikom parsiranja");
+			}
+			
+			System.out.println("okej sad idemo dalje...");
+			if (parsedTeams != null) {
+				System.out.println("Nakon parsiranja ulaznog fajla, "
+						+ "pronasao sam: " + parsedTeams.size() + " timova!");
+				if (parsedTeams.size() > 0) {
+					ArrayList<Team> trimmedTeams = DataUtilities.removeExtraMembersFromTeams(parsedTeams, runnersInTeam);
+					System.out.println("Nakon trimovanja, pronasao sam: "
+							+ trimmedTeams.size() + " timova!");
+					for(Team team : trimmedTeams) {
+						team.calculateTeamTotalTime();
+						team.calculateTeamAverageTime();
+					}
+					System.out.println("Izracunao sam sva ukupna i prosecna vremena");
+					
+					ArrayList<Team> sortedTeams = DataUtilities.sortByTotalTime(trimmedTeams);
+					System.out.println("A sada sam uspesno sortirao timove");
+					for(Team t : sortedTeams) {
+						System.out.println(t.getTeamName() + " - Total Time: " + t.getTotalTime());
+					}
+					System.out.println("Sve je kako treba...");
+					FileUtilities.writeCSVFile(sortedTeams, "primer");
+				}
+			} else {
+				System.out.println("teams je null :(");
+			}
+			
+			/*
 			fileChooser = new JFileChooser();
 			fileChooser.setAcceptAllFileFilterUsed(false);
 		    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-		        "CSV File", "csv");
+		    										"CSV File", "csv");
 		    fileChooser.setFileFilter(filter);
+		    
 		    int returnVal = fileChooser.showSaveDialog(GUI.this);
 		    if(returnVal == JFileChooser.APPROVE_OPTION)
 		    {			    	
@@ -117,27 +171,32 @@ public class GUI extends JFrame {
 		    	teams = DataUtilities.removeExtraMembersFromTeams(teams, (Integer) spinnerRunnerCount.getValue());
 		    	teams = DataUtilities.sortByTotalTime(teams);
 		    	FileUtilities.writeCSVFile(teams, outputFile.getAbsolutePath());
-		    }else
+		    }
+		    else
 		    {
 		    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
 
 		    }
+		    */
 		}
 	}
 	
 	
-	public void chooseFile() {
+	public void chooseFileAction() 
+	{
 		fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
 	        "CSV File", "csv");
 	    fileChooser.setFileFilter(filter);
+	    
 	    int returnVal = fileChooser.showOpenDialog(GUI.this);
-	    if(returnVal == JFileChooser.APPROVE_OPTION)
+	    if (returnVal == JFileChooser.APPROVE_OPTION)
 	    {			    	
 	    	txtFieldInputFileName.setText(fileChooser.getSelectedFile().getName());
 	    	choosenFile = fileChooser.getSelectedFile();
-	    }else
+	    }
+	    else
 	    {
 	    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
 	    	txtFieldInputFileName.setText("");

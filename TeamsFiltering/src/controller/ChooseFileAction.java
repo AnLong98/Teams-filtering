@@ -16,7 +16,7 @@ public class ChooseFileAction extends AbstractAction{
 		JComponent c = (JComponent) e.getSource();
 		GUI frame = (GUI) SwingUtilities.getRoot(c);
 		
-		frame.chooseFile();
+		frame.chooseFileAction();
 	}
 
 }

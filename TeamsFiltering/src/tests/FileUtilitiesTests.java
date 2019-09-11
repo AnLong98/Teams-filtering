@@ -90,7 +90,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__hh_mm_ss_time_format__assert_content()
+	public void parseRunnerFromDataDict_hhmmssTimeFormat_assertContent()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -116,7 +116,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__disqualified_runner__returns_null()
+	public void parseRunnerFromDataDict_disqualifiedRunner_returnsNull()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -136,7 +136,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__ddmmyyyy_date_format__parses_birth_year()
+	public void parseRunnerFromDataDict_ddmmyyyyDateFormat_parsesBirthYear()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -157,7 +157,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__yyyy_date_format__parses_birth_year()
+	public void parseRunnerFromDataDict_yyyyDateFormat_parsesBirthYear()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -178,7 +178,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseCSVFile__file_with_44_teams__assert_team_count()
+	public void parseCSVFile_fileWith44Teams_assertTeamCount()
 	{
 		try 
 		{
@@ -192,7 +192,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseCSVFile__team_with_one_qualified_runner__assert_runner_count()
+	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerCount()
 	{
 		try 
 		{
@@ -206,7 +206,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseCSVFile__team_with_one_qualified_runner__assert_runner_info()
+	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerInfo()
 	{
 		Runner expectedRunner = new Runner("Predrag", "GlavaÅ¡", "SRB", "1998", 100, "Male", LocalTime.of(2, 20, 32));
 		
@@ -242,36 +242,21 @@ public class FileUtilitiesTests {
 		teams.add(team1);
 		teams.add(team3);
 		
-		//System.out.println(team1.getAverageTime());
-		//System.out.println(team1.getTotalTime());
-		
 		teams = DataUtilities.sortByTotalTime(teams);
 		
 		assertTrue(FileUtilities.writeCSVFile(teams, "test"));
 	}
 	
 	@Test
-	public void writeCSVFile_testTeam_assertContent()
+	public void getCSVDataFromTeam_testTeam_assertContent()
 	{
 		
-		Team team1 = new Team("Test team");
-		
-		team1.AddRunnerToTeam(new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32)));
-		team1.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "M", LocalTime.of(2, 20, 33)));
-		team1.AddRunnerToTeam(new Runner("Predragurda", "Glavašurda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34)));
-		team1.AddRunnerToTeam(new Runner("Predragetina", "Glavašetina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35)));
-		team1.AddRunnerToTeam(new Runner("Predrager", "Glavašer", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36)));
-		team1.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "M", LocalTime.of(2, 20, 37)));
-		
-		team1.TrimTeam(4);
-		team1.calculateTeamTotalTime();
-		team1.calculateTeamAverageTime();
+		Team team1 = TeamsForTest.createPedjaTeam();
 		
 		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1);
 		
-
 		String[] receivedData  = csvData.get(0);
-		String[] expectedData = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Test team" , "02:20:32", "02:20:34", "09:22:14"};
+		String[] expectedData = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};
 		
 		assertEquals(receivedData[0], expectedData[0]);
 		assertEquals(receivedData[1], expectedData[1]);
@@ -284,7 +269,6 @@ public class FileUtilitiesTests {
 		assertEquals(receivedData[8], expectedData[8]);
 		assertEquals(receivedData[9], expectedData[9]);
 		assertEquals(receivedData[10], expectedData[10]);
-		
 	}
 
 }

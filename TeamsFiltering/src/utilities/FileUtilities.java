@@ -101,7 +101,6 @@ public class FileUtilities {
         }
         
         return csvTeamData;
-		
 	}
 	
 	
@@ -113,7 +112,6 @@ public class FileUtilities {
 		//Check if file is empty
 		if (csvFile.length() == 0)
 		{
-			System.out.println("Prazan sam");
 			return null;
 		}
 		
@@ -151,13 +149,11 @@ public class FileUtilities {
             	{
             		currentTeam = new Team(teamName);
             		currentTeam.AddRunnerToTeam(currentRunner);
-            		
             	}
             	else if(teamName.equals(currentTeam.getTeamName()))
             	{
             		//If parsed runner is member of the same team as last parsed runner put him there
-            		currentTeam.AddRunnerToTeam(currentRunner);
-            		
+            		currentTeam.AddRunnerToTeam(currentRunner);	
             	}
             	else if( !teamName.equals(currentTeam.getTeamName()) )
             	{
