@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import data.Runner;
 import data.Team;
+import exceptions.IllegalInputHeaderException;
 import utilities.DataUtilities;
 import utilities.FileUtilities;
 import utilities.TeamsForTest;
@@ -47,6 +48,23 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
+	public void Test__getDataDictFromCSVFileLine__leadingWhitespaces__assert_content() {
+		
+		String[] dataLine = {" 110",	"NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", " 3:20:52"};
+		
+		HashMap<DATA_FIELDS, String> returnValue = FileUtilities.getDataDictFromCSVFileLine(dataLine);
+		
+		assertEquals(returnValue.get(DATA_FIELDS.BIB), "110");
+		assertEquals(returnValue.get(DATA_FIELDS.FIRSTNAME), "NataÅ¡a");
+		assertEquals(returnValue.get(DATA_FIELDS.LASTNAME), "Naletina");
+		assertEquals(returnValue.get(DATA_FIELDS.SEX), "Female");
+		assertEquals(returnValue.get(DATA_FIELDS.DOB), "1983");
+		assertEquals(returnValue.get(DATA_FIELDS.STATE), "SRB");
+		assertEquals(returnValue.get(DATA_FIELDS.TEAMNAME), "adidas runners beograd");
+		assertEquals(returnValue.get(DATA_FIELDS.CHIPTIME), "3:20:52");	
+	}
+	
+	@Test
 	public void Test__getDataDictFromCSVFileLine__empty_field__assert_content(){
 		
 		String[] dataLine = {"110",	"NataÅ¡a", "Naletina", "Female",	"1983",	"SRB", " ", "3:20:52"};
@@ -59,7 +77,7 @@ public class FileUtilitiesTests {
 		assertEquals(returnValue.get(DATA_FIELDS.SEX), "Female");
 		assertEquals(returnValue.get(DATA_FIELDS.DOB), "1983");
 		assertEquals(returnValue.get(DATA_FIELDS.STATE), "SRB");
-		assertEquals(returnValue.get(DATA_FIELDS.TEAMNAME), " ");
+		assertEquals(returnValue.get(DATA_FIELDS.TEAMNAME), "");
 		assertEquals(returnValue.get(DATA_FIELDS.CHIPTIME), "3:20:52");	
 	}
 	
@@ -89,8 +107,9 @@ public class FileUtilitiesTests {
 		assertEquals(expectedValue.getState(), returnedValue.getState());
 	}
 	
+	
 	@Test
-	public void Test__ParseRunnerFromDataDict__hh_mm_ss_time_format__assert_content()
+	public void parseRunnerFromDataDict_hhmmssTimeFormat_assertContent()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -116,7 +135,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__disqualified_runner__returns_null()
+	public void parseRunnerFromDataDict_disqualifiedRunner_returnsNull()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -136,7 +155,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__ddmmyyyy_date_format__parses_birth_year()
+	public void parseRunnerFromDataDict_ddmmyyyyDateFormat_parsesBirthYear()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -157,7 +176,7 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseRunnerFromDataDict__yyyy_date_format__parses_birth_year()
+	public void parseRunnerFromDataDict_yyyyDateFormat_parsesBirthYear()
 	{
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
@@ -178,35 +197,35 @@ public class FileUtilitiesTests {
 	}
 	
 	@Test
-	public void Test__ParseCSVFile__file_with_44_teams__assert_team_count()
+	public void parseCSVFile_fileWith44Teams_assertTeamCount()
 	{
 		try 
 		{
 			ArrayList<Team> returnedValue = FileUtilities.ParseCSVFile(new File("dayumson.csv"));
 			assertEquals(returnedValue.size(), 44);
 		} 
-		catch (FileNotFoundException e) 
+		catch (FileNotFoundException | IllegalInputHeaderException e) 
 		{
-			fail("File was not found");
+			fail("File error");
 		}
 	}
 	
 	@Test
-	public void Test__ParseCSVFile__team_with_one_qualified_runner__assert_runner_count()
+	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerCount()
 	{
 		try 
 		{
 			ArrayList<Team> returnedValue = FileUtilities.ParseCSVFile(new File("team_valid_and_invalid_runners.csv"));
 			assertEquals(returnedValue.get(0).getTeamMembers().size(), 1);
 		} 
-		catch (FileNotFoundException e) 
+		catch (FileNotFoundException | IllegalInputHeaderException e) 
 		{
-			fail("File was not found");
+			fail("File error");
 		}
 	}
 	
 	@Test
-	public void Test__ParseCSVFile__team_with_one_qualified_runner__assert_runner_info()
+	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerInfo()
 	{
 		Runner expectedRunner = new Runner("Predrag", "GlavaÅ¡", "SRB", "1998", 100, "Male", LocalTime.of(2, 20, 32));
 		
@@ -223,9 +242,9 @@ public class FileUtilitiesTests {
 			assertEquals(expectedRunner.getState(), returnedRunner.getState());
 			assertEquals(expectedRunner.getChipTime(), returnedRunner.getChipTime());
 		} 
-		catch (FileNotFoundException e) 
+		catch (FileNotFoundException | IllegalInputHeaderException e) 
 		{
-			fail("File was not found");
+			fail("File error");
 		}
 	}
 	
@@ -242,32 +261,18 @@ public class FileUtilitiesTests {
 		teams.add(team1);
 		teams.add(team3);
 		
-		//System.out.println(team1.getAverageTime());
-		//System.out.println(team1.getTotalTime());
-		
 		teams = DataUtilities.sortByTotalTime(teams);
 		
 		assertTrue(FileUtilities.writeCSVFile(teams, "test"));
 	}
 	
 	@Test
-	public void writeCSVFile_testTeam_assertContent()
+	public void getCSVDataFromTeam_testTeam_assertContent()
 	{
 		
-		Team team1 = new Team("Test team");
-		
-		team1.AddRunnerToTeam(new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32)));
-		team1.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "M", LocalTime.of(2, 20, 33)));
-		team1.AddRunnerToTeam(new Runner("Predragurda", "Glavašurda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34)));
-		team1.AddRunnerToTeam(new Runner("Predragetina", "Glavašetina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35)));
-		team1.AddRunnerToTeam(new Runner("Predrager", "Glavašer", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36)));
-		team1.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "M", LocalTime.of(2, 20, 37)));
-		
-		team1.TrimTeam(4);
-		team1.calculateTeamTotalTime();
-		team1.calculateTeamAverageTime();
-		
-		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1);
+		Team team1 = TeamsForTest.createPedjaTeam();
+		int place = 1;
+		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1, place);
 		
 
 		String[] receivedDataFirst  = csvData.get(0);
@@ -300,6 +305,24 @@ public class FileUtilitiesTests {
 		assertEquals(expectedDataSecond[9], receivedDataSecond[9]);
 		assertEquals(expectedDataSecond[10], receivedDataSecond[10]);
 		
+	}
+	
+	@Test
+	public void ComnpareFileHeaders_Whitespaces_returnsTrue()
+	{
+		String[] firstHeader = { "Bib #" , "First Name" , "Last Name" , "Sex" ,"DOB" , "State" , "Team Name", "Chip Time" };
+		String[] secondHeader = { " Bib #" , " First Name" , " Last Name" , " Sex" ," DOB" , " State" , " Team Name", " Chip Time" };
+		
+		assertTrue(FileUtilities.CompareFileHeaders(firstHeader, secondHeader));
+	}
+	
+	@Test
+	public void ComnpareFileHeaders_nbsps_returnsTrue()
+	{
+		String[] firstHeader = { "Bib #" , "First Name" , "Last Name" , "Sex" ,"DOB" , "State" , "Team Name", "Chip Time" };
+		String[] secondHeader = { "\u00A0Bib #" , "\u00A0First Name" , "\u00A0Last Name" , "\u00A0Sex" ,"\u00A0DOB" , "\u00A0State" , "\u00A0Team Name", "\u00A0Chip Time" };
+		
+		assertTrue(FileUtilities.CompareFileHeaders(firstHeader, secondHeader));
 	}
 
 }
