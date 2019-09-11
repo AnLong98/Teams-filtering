@@ -28,10 +28,8 @@ public class FileUtilities {
 	public static boolean writeCSVFile(ArrayList<Team> teams, String fileName)
 	{	
 		boolean ret = false;
-		String csvFileName = fileName;
+		String csvFileName = fileName + ".csv";
 		
-		// File input path
-        //System.out.println("Starting....");
         try 
         {
         	PrintWriter output = new PrintWriter(new File(csvFileName));
@@ -41,14 +39,15 @@ public class FileUtilities {
 
             // Header column value
             csvWriter.writeNext(outputCSVHeader);           
-       
+            
+            int place = 0;
             for(Team team : teams)
             {
-            	for(String[] csvRowData : getCSVDataFromTeam(team))
+            	place++;
+            	for(String[] csvRowData : getCSVDataFromTeam(team, place))
             	{
             		csvWriter.writeNext(csvRowData);
             	}
-            	
             }
             
             csvWriter.close();
@@ -60,44 +59,38 @@ public class FileUtilities {
             // TODO: handle exception
             e.printStackTrace();
         }
-
-        //System.out.println("End.");
-		
+        
 		return ret;
 	}
 	
-	
-	public static ArrayList<String[]> getCSVDataFromTeam(Team team)
+	public static ArrayList<String[]> getCSVDataFromTeam(Team team, int place)
 	{
-		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();
-		
-		int place = 0;
-
-        place++;
+		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();	
         boolean firstRunnerInTeam = true;
-        	
+    	
+        String placeStr = String.valueOf(place);
+    	String avgTimeStr = DataUtilities.formatCSVOutputTime(team.getAverageTime());
+    	String totalTimeStr = DataUtilities.formatCSVOutputTime(team.getTotalTime());
+        
         for(Runner runner: team.getTeamMembers())
         {
-        		
-        	if(firstRunnerInTeam)
+        	if (!firstRunnerInTeam)
         	{
-        		String[] csvString = { String.valueOf(place), String.valueOf(runner.getBib_number()),
-            			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-            			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(runner.getChipTime()),
-            			DataUtilities.formatCSVOutputTime(team.getAverageTime()), DataUtilities.formatCSVOutputTime(team.getTotalTime())};
-        			
-        		firstRunnerInTeam = false;
-        		csvTeamData.add(csvString);
-        	}else
-        	{
-        		String[] csvString = { "", String.valueOf(runner.getBib_number()),
-            			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-            			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(runner.getChipTime()),
-            			"", "" };
-            		
-        		csvTeamData.add(csvString);
+        		placeStr = "";
+        		avgTimeStr = "";
+        		totalTimeStr = "";
         	}
-        		
+        	else
+        	{	
+        		firstRunnerInTeam = false;
+        	}
+        	
+        	String[] csvString = { placeStr, String.valueOf(runner.getBib_number()),
+        			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
+        			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(runner.getChipTime()),
+        			avgTimeStr, totalTimeStr };
+        	
+        	csvTeamData.add(csvString);	
         }
         
         return csvTeamData;

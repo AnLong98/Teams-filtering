@@ -252,8 +252,8 @@ public class FileUtilitiesTests {
 	{
 		
 		Team team1 = TeamsForTest.createPedjaTeam();
-		
-		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1);
+		int place = 1;
+		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1, place);
 		
 		String[] receivedData  = csvData.get(0);
 		String[] expectedData = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};

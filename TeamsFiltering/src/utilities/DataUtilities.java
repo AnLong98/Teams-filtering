@@ -17,7 +17,6 @@ public class DataUtilities {
 		
 		for (Team team : teams)
 		{
-
 			boolean isValid = team.TrimTeam(validSize);
 			
 			if (isValid)
@@ -29,8 +28,8 @@ public class DataUtilities {
 		return validTeams;
 	}
 	
-	public static LocalTime roundSeconds(LocalTime time) {
-		
+	public static LocalTime roundSeconds(LocalTime time) 
+	{
 		if (time.getNano() >= nanoBound) 
 		{
 			time = time.plusSeconds(1);
@@ -63,6 +62,7 @@ public class DataUtilities {
 			formattedTime += "0";
 			
 		}
+		
 		formattedTime += String.valueOf(minutes);
 		formattedTime += delmiter;
 		
@@ -76,11 +76,14 @@ public class DataUtilities {
 		return formattedTime;
 	}
 
-	public static ArrayList<Team> sortByTotalTime(ArrayList<Team> teams) {
+	public static ArrayList<Team> sortByTotalTime(ArrayList<Team> teams) 
+	{
 		
-		Collections.sort(teams, new Comparator<Team>() {
+		Collections.sort(teams, new Comparator<Team>() 
+		{
 		    @Override
-		    public int compare(Team team1, Team team2) {
+		    public int compare(Team team1, Team team2) 
+		    {
 		        return team1.getTotalTime().compareTo(team2.getTotalTime());
 		    }
 		});
