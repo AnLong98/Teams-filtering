@@ -31,8 +31,6 @@ public class FileUtilities {
         try 
         {
         	PrintWriter output = new PrintWriter(new File(csvFileName));
-        	//File fileDir = new File(csvFileName);
-        	//PrintWriter output = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileDir), "UTF8"));
             CSVWriter csvWriter = new CSVWriter(output);
 
             // Header column value
@@ -56,8 +54,8 @@ public class FileUtilities {
         {
             // TODO: handle exception
             e.printStackTrace();
-        }
-        
+		}
+		
 		return ret;
 	}
 	
