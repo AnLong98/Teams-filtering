@@ -19,6 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import controller.ChooseFileAction;
 import controller.ProcessDataAction;
 import data.Team;
+import exceptions.IllegalInputHeaderException;
 import utilities.DataUtilities;
 import utilities.FileUtilities;
 
@@ -98,60 +99,52 @@ public class GUI extends JFrame {
 		}
 		else
 		{
-			System.out.println("Imam fajl za obradu...");
 			if (choosenFile instanceof File)
 			{
-				System.out.println(choosenFile.getName() + ": je fajl");
+
 			}
 			
-			System.out.println(spinnerRunnerCount.getValue());
 			int runnersInTeam = (int) spinnerRunnerCount.getValue();
-			System.out.println(runnersInTeam);
-			
+
 			ArrayList<Team> parsedTeams = null;
 			try 
 			{
 				parsedTeams = FileUtilities.ParseCSVFile(choosenFile);
-				System.out.println("uspeo sam da parsiram");
-			} catch (FileNotFoundException e) 
+				
+			} catch (FileNotFoundException fne) 
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e1) 
+
+				fne.printStackTrace();
+				JOptionPane.showMessageDialog(GUI.this, "Traženi fajl nije pronađen ili ne može biti otvoren!");
+				return;
+				
+			} catch (IllegalInputHeaderException iihe) 
 			{
-				System.out.println("neki drugi exception prilikom parsiranja");
+
+				iihe.printStackTrace();
+				JOptionPane.showMessageDialog(GUI.this, "Zaglavlje izabranog fajla nije podržano!");
+				return;
 			}
 			
-			System.out.println("okej sad idemo dalje...");
 			if (parsedTeams != null) 
 			{
-				System.out.println("Nakon parsiranja ulaznog fajla, "
-						+ "pronasao sam: " + parsedTeams.size() + " timova!");
+				
 				if (parsedTeams.size() > 0) 
 				{
 					ArrayList<Team> trimmedTeams = DataUtilities.removeExtraMembersFromTeams(parsedTeams, runnersInTeam);
-					System.out.println("Nakon trimovanja, pronasao sam: "
-							+ trimmedTeams.size() + " timova!");
+					
 					for(Team team : trimmedTeams) {
 						team.calculateTeamTotalTime();
 						team.calculateTeamAverageTime();
 					}
-					System.out.println("Izracunao sam sva ukupna i prosecna vremena");
+					
 					
 					ArrayList<Team> sortedTeams = DataUtilities.sortByTotalTime(trimmedTeams);
-					System.out.println("A sada sam uspesno sortirao timove");
-					for(Team t : sortedTeams) {
-						System.out.println(t.getTeamName() + " - Total Time: " + t.getTotalTime());
-					}
-					System.out.println("Sve je kako treba...");
-					
-					// **********************************
-					System.out.println("pre filechooser-a");
-					
+
 					outputFileChooser = new JFileChooser();
 					outputFileChooser.setCurrentDirectory(new java.io.File("."));
-					outputFileChooser.setDialogTitle("Save as");
-					outputFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+					outputFileChooser.setDialogTitle("Sačuvaj fajl");
+					outputFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 					outputFileChooser.setAcceptAllFileFilterUsed(false);
 					
 					int returnVal = outputFileChooser.showSaveDialog(GUI.this);
