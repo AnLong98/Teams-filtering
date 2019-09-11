@@ -45,7 +45,7 @@ public class GUI extends JFrame {
 	 */
 	private void initialize() {
 		setResizable(false);
-		setTitle("Neki fensi naziv");
+		setTitle("Filtriranje timskog plasmana");
 		setBounds(100, 100, 477, 227);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new CardLayout(0, 0));
@@ -65,6 +65,7 @@ public class GUI extends JFrame {
 		panel.add(lblRunnerCount);
 		
 		lblInputFileName = new JLabel("Ulazni fajl:");
+		lblInputFileName.setToolTipText("Klikni na dugme izaberi da izabereš ulazni fajl");
 		lblInputFileName.setBounds(32, 31, 68, 14);
 		panel.add(lblInputFileName);
 		
@@ -84,7 +85,7 @@ public class GUI extends JFrame {
 		btnChooseFile = new JButton("Izaberi");
 		btnChooseFile.addActionListener(new ChooseFileAction());
 		btnChooseFile.setToolTipText("Klikni ovde da izabereš fajl za obradu");
-		btnChooseFile.setBounds(319, 27, 148, 23);
+		btnChooseFile.setBounds(319, 27, 117, 23);
 		panel.add(btnChooseFile);
 		
 		setVisible(true);
@@ -167,7 +168,6 @@ public class GUI extends JFrame {
 			} 
 			else 
 			{
-				System.out.println("teams je null :(");
 				JOptionPane.showMessageDialog(GUI.this, "Došlo je do greške pri učitavanju"
 		    			+ "\n" + "timova iz ulaznog fajla!");
 			}

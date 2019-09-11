@@ -2,8 +2,10 @@ package utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -34,8 +36,12 @@ public class FileUtilities {
 		
         try 
         {
-        	PrintWriter output = new PrintWriter(new File(csvFileName));
-            CSVWriter csvWriter = new CSVWriter(output);
+        	FileOutputStream os = new FileOutputStream(new File(csvFileName));
+        	os.write(0xef);
+        	os.write(0xbb);
+        	os.write(0xbf);
+        	CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(os));
+
 
             // Header column value
             csvWriter.writeNext(outputCSVHeader);           
