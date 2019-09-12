@@ -88,7 +88,7 @@ public class FileUtilitiesTests {
 		
 		dataDict.put(DATA_FIELDS.BIB, "110");
 		dataDict.put(DATA_FIELDS.LASTNAME, "Naletina");
-		dataDict.put(DATA_FIELDS.FIRSTNAME, "NataÅ¡a");
+		dataDict.put(DATA_FIELDS.FIRSTNAME, "Nataša");
 		dataDict.put(DATA_FIELDS.SEX, "Female");
 		dataDict.put(DATA_FIELDS.DOB, "1983");
 		dataDict.put(DATA_FIELDS.STATE, "SRB");
@@ -113,7 +113,7 @@ public class FileUtilitiesTests {
 		HashMap<DATA_FIELDS, String> dataDict = new HashMap<DATA_FIELDS, String>();
 		
 		dataDict.put(DATA_FIELDS.BIB, "110");
-		dataDict.put(DATA_FIELDS.FIRSTNAME, "NataÅ¡a");
+		dataDict.put(DATA_FIELDS.FIRSTNAME, "Nataša");
 		dataDict.put(DATA_FIELDS.LASTNAME, "Naletina");
 		dataDict.put(DATA_FIELDS.SEX, "Female");
 		dataDict.put(DATA_FIELDS.DOB, "1983");
@@ -226,7 +226,7 @@ public class FileUtilitiesTests {
 	@Test
 	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerInfo()
 	{
-		Runner expectedRunner = new Runner("Predrag", "GlavaÅ¡", "SRB", "1998", 100, "Male", LocalTime.of(2, 20, 32));
+		Runner expectedRunner = new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32));
 		
 		try 
 		{
@@ -274,10 +274,10 @@ public class FileUtilitiesTests {
 		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1, place);
 		
 		String[] receivedDataFirst  = csvData.get(0);
-		String[] expectedDataFirst = {"1", "100","Predrag", "Glava�", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};
+		String[] expectedDataFirst = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};
 		
 		String[] receivedDataSecond  = csvData.get(1);
-		String[] expectedDataSecond = {"", "101","Predragica", "Glava�ica", "M", "1997", "SRB", "Pedja team" , "02:20:33", "", ""};
+		String[] expectedDataSecond = {"", "101","Predragica", "Glavašica", "M", "1997", "SRB", "Pedja team" , "02:20:33", "", ""};
 		
 		assertEquals(expectedDataFirst[0], receivedDataFirst[0]);
 		assertEquals(expectedDataFirst[1], receivedDataFirst[1]);

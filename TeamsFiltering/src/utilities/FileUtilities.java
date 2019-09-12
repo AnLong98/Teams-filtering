@@ -1,11 +1,15 @@
 package utilities;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -35,14 +39,14 @@ public class FileUtilities {
 	{	
 		boolean ret = false;
 		String csvFileName = fileName + ".csv";
+
 		
         try 
         {
-        	FileOutputStream os = new FileOutputStream(new File(csvFileName));
-        	os.write(0xef);
-        	os.write(0xbb);
-        	os.write(0xbf);
-        	CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(os));
+        	FileOutputStream fos = new FileOutputStream(csvFileName);
+            OutputStreamWriter osw = new OutputStreamWriter(fos, Charset.forName("UTF8"));
+
+            CSVWriter csvWriter = new CSVWriter(osw);
 
 
             // Header column value
@@ -116,8 +120,10 @@ public class FileUtilities {
 			return null;
 		}
 		
-        //Get the CSVReader instance with specifying the delimiter to be used
-        reader = new CSVReader(new FileReader(csvFile),',');
+		FileInputStream fis = new FileInputStream(csvFile);
+        InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF8"));
+        reader = new CSVReader(isr);
+		
             
         String [] nextLine;
          //Keep this here for now, we don't know if we will need it later
