@@ -122,7 +122,7 @@ public class FileUtilities {
 		
 		FileInputStream fis = new FileInputStream(csvFile);
         InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF8"));
-        reader = new CSVReader(isr);
+        reader = new CSVReader(isr, ',');
 		
             
         String [] nextLine;
@@ -203,7 +203,9 @@ public class FileUtilities {
 			return null;
 		}
 		
+		
 		HashMap<DATA_FIELDS, String> dataMap= new HashMap<DATA_FIELDS, String>();
+		
 		dataMap.put(DATA_FIELDS.BIB, line[0].trim());
 		dataMap.put(DATA_FIELDS.FIRSTNAME, line[1].trim());
 		dataMap.put(DATA_FIELDS.LASTNAME, line[2].trim());
@@ -212,6 +214,8 @@ public class FileUtilities {
 		dataMap.put(DATA_FIELDS.STATE, line[5].trim());
 		dataMap.put(DATA_FIELDS.TEAMNAME, line[6].trim());
 		dataMap.put(DATA_FIELDS.CHIPTIME,  line[7].trim());
+		
+		
 		
 		return dataMap;
 	}

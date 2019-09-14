@@ -118,6 +118,11 @@ public class GUI extends JFrame {
 				iihe.printStackTrace();
 				JOptionPane.showMessageDialog(GUI.this, "Zaglavlje izabranog fajla nije podržano!");
 				return;
+			}catch (ArrayIndexOutOfBoundsException a)
+			{
+				a.printStackTrace();
+				JOptionPane.showMessageDialog(GUI.this, "Greška pri čitanju fajla, proverite da li je format podataka ispravan!");
+				return;
 			}
 			
 			if (parsedTeams != null) 
