@@ -1,5 +1,6 @@
 package utilities;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class DataUtilities {
 		return validTeams;
 	}
 	
-	public static LocalTime roundSeconds(LocalTime time) 
+	public static Duration roundSeconds(Duration time) 
 	{
 		if (time.getNano() >= nanoBound) 
 		{
@@ -40,11 +41,13 @@ public class DataUtilities {
 		return time;
 	}
 	
-	public static String formatCSVOutputTime(LocalTime localTime)
+	public static String formatCSVOutputTime(Duration duration)
 	{
-		int hours = localTime.getHour();
-		int minutes = localTime.getMinute();
-		int seconds = localTime.getSecond();
+		
+		long secondsDuration = Math.abs(duration.getSeconds());
+		long hours = secondsDuration / 3600;
+		long minutes = (secondsDuration % 3600) / 60;
+		long seconds = secondsDuration % 60;
 		
 		String formattedTime = "";
 		String delmiter = ":";

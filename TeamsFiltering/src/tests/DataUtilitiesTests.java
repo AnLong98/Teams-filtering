@@ -2,6 +2,7 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -99,31 +100,31 @@ public class DataUtilitiesTests {
 	@Test
 	public void roundSeconds_shouldAddSecond_returnPlusOneSecond()
 	{
-		LocalTime expectedValue = LocalTime.parse("00:00:01");
-		LocalTime timeToRound = LocalTime.parse("00:00:00.5");
+		Duration expectedValue = Duration.ofSeconds(1);
+		Duration timeToRound = Duration.ofMillis(500); // 00:00:00.5
 		
-		LocalTime returnValue = DataUtilities.roundSeconds(timeToRound);
+		Duration returnValue = DataUtilities.roundSeconds(timeToRound);
 		
-		assertEquals(expectedValue.getSecond(), returnValue.getSecond());
+		assertEquals(expectedValue.getSeconds(), returnValue.getSeconds());
 	}
 	
 	@Test
 	public void roundSeconds_shouldNotAddSecond_returnSameNumberOfSeconds()
 	{	
-		LocalTime expectedValue = LocalTime.parse("00:00:01");
-		LocalTime timeToRound = LocalTime.parse("00:00:01.4");
+		Duration expectedValue = Duration.ofSeconds(1);
+		Duration timeToRound = Duration.ofMillis(1400); // 00:00:01.4
 		
-		LocalTime returnValue = DataUtilities.roundSeconds(timeToRound);
+		Duration returnValue = DataUtilities.roundSeconds(timeToRound);
 		
-		assertEquals(expectedValue.getSecond(), returnValue.getSecond());
+		assertEquals(expectedValue.getSeconds(), returnValue.getSeconds());
 	}
 	
 	@Test
 	public void roundSeconds_shouldAddSecond_returnZeroNanos()
 	{
-		LocalTime timeToRound = LocalTime.parse("00:00:00.5");
+		Duration timeToRound = Duration.ofMillis(500);
 		
-		LocalTime returnValue = DataUtilities.roundSeconds(timeToRound);
+		Duration returnValue = DataUtilities.roundSeconds(timeToRound);
 		
 		assertEquals(0, returnValue.getNano());
 	}
@@ -131,9 +132,9 @@ public class DataUtilitiesTests {
 	@Test
 	public void roundSeconds_shouldNotAddSecond_returnZeroNanos()
 	{
-		LocalTime timeToRound = LocalTime.parse("00:00:01.4");
+		Duration timeToRound = Duration.ofMillis(1400); // 00:00:01.4
 		
-		LocalTime returnValue = DataUtilities.roundSeconds(timeToRound);
+		Duration returnValue = DataUtilities.roundSeconds(timeToRound);
 		
 		assertEquals(0, returnValue.getNano());
 	}
@@ -141,7 +142,8 @@ public class DataUtilitiesTests {
 	@Test
 	public void formatCSVOutputTime_singleDigitValues__assertContent()
 	{
-		LocalTime timeToRound = LocalTime.parse("03:05:09");
+		LocalTime parsedTime = LocalTime.parse("03:05:09");
+		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
 		
 		String returnValue = DataUtilities.formatCSVOutputTime(timeToRound);
 		String expectedValue = "03:05:09";

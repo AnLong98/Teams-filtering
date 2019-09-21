@@ -60,5 +60,23 @@ public class TeamsForTest {
 		
 		return team;
 	}
+	
+	public static Team createNenormalniTeam() 
+	{
+		Team team = new Team("Nenormalni ludaci koji trče previše");
+		
+		team.AddRunnerToTeam(new Runner("Nenormalni", "Lik", "SRB", "1982", 400, "M", LocalTime.parse("12:40:30")));
+		team.AddRunnerToTeam(new Runner("Nenormalniji", "Lik", "SRB", "1976", 401, "M", LocalTime.parse("14:25:38")));
+		team.AddRunnerToTeam(new Runner("Nenormalna", "Likuša", "SRB", "1985", 402, "F", LocalTime.parse("11:12:13")));
+		team.AddRunnerToTeam(new Runner("Nenormalnija", "Likuša", "SRB", "1971", 403, "F", LocalTime.parse("15:42:41")));
+
+		
+		
+		team.TrimTeam(4);
+		team.calculateTeamTotalTime();
+		team.calculateTeamAverageTime();
+		
+		return team;
+	}
 
 }

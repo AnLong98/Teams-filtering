@@ -10,17 +10,33 @@ public class Team {
 
 	private String teamName;
 	private ArrayList<Runner> teamMembers;
-	private LocalTime averageTime, totalTime;
+	private Duration averageTime, totalTime;
 	
 	
 	public Team(String teamName) {
 		super();
 		this.teamName = teamName;
 		this.teamMembers  = new ArrayList<Runner>();
-		this.averageTime = LocalTime.MIDNIGHT; 	// (00:00:00) zavisi sta nam je lepse
-		this.totalTime = LocalTime.MIDNIGHT;	// LocalTime.parse("00:00:00")
+		this.averageTime = Duration.ZERO; 	// (00:00:00) zavisi sta nam je lepse
+		this.totalTime = Duration.ZERO;	// LocalTime.parse("00:00:00")
 	}
 	
+	public Duration getAverageTime() {
+		return averageTime;
+	}
+
+	public void setAverageTime(Duration averageTime) {
+		this.averageTime = averageTime;
+	}
+
+	public Duration getTotalTime() {
+		return totalTime;
+	}
+
+	public void setTotalTime(Duration totalTime) {
+		this.totalTime = totalTime;
+	}
+
 	public boolean TrimTeam(int newSize)
 	{
 		if(teamMembers.size() < newSize)
@@ -51,12 +67,10 @@ public class Team {
 		
 		for (Runner teamMember : this.getTeamMembers())
 		{
-			LocalTime runnerTime = teamMember.getChipTime();
-			LocalTime currentTotalTime = this.getTotalTime();
+			Duration runnerTime = Duration.between(LocalTime.MIDNIGHT, teamMember.getChipTime());
+			Duration currentTotalTime = this.getTotalTime();
 			
-			currentTotalTime = currentTotalTime.plusSeconds(runnerTime.getSecond());
-			currentTotalTime = currentTotalTime.plusMinutes(runnerTime.getMinute());
-			currentTotalTime = currentTotalTime.plusHours(runnerTime.getHour());
+			currentTotalTime = currentTotalTime.plus(runnerTime);
 			
 			this.setTotalTime(currentTotalTime);
 		}
@@ -67,19 +81,15 @@ public class Team {
 	
 	public boolean calculateTeamAverageTime() 
 	{
-		if (this.getTotalTime() == LocalTime.MIDNIGHT)
-		{
-			return false;
-		}
+		if(teamMembers.size() == 0)return false;
 		
-		Duration totalTime = Duration.between(LocalTime.MIDNIGHT, this.getTotalTime());
-		Duration dividedTotalTime = totalTime.dividedBy(this.getTeamMembers().size());
-		LocalTime calculatedAverageTime = LocalTime.ofNanoOfDay(dividedTotalTime.toNanos());
+		Duration dividedTotalTime = this.totalTime.dividedBy(this.getTeamMembers().size());
+		//LocalTime calculatedAverageTime = LocalTime.ofNanoOfDay(dividedTotalTime.toNanos());
 		
 		//System.out.println("second before: " + calculatedAverageTime.getSecond());
 		//System.out.println("nano before: " + calculatedAverageTime.getNano());
 		
-		calculatedAverageTime = DataUtilities.roundSeconds(calculatedAverageTime);
+		Duration calculatedAverageTime = DataUtilities.roundSeconds(dividedTotalTime);
 		
 		//System.out.println("second after: " + calculatedAverageTime.getSecond());
 		//System.out.println("nano after: " + calculatedAverageTime.getNano());
@@ -112,22 +122,6 @@ public class Team {
 	public void setTeamMembers(ArrayList<Runner> teamMembers) {
 		this.teamMembers = teamMembers;
 	}
-	
-	public LocalTime getAverageTime() {
-		return averageTime;
-	}
-	
-	public void setAverageTime(LocalTime averageTime) {
-		this.averageTime = averageTime;
-	}
-	
-	public LocalTime getTotalTime() {
-		return totalTime;
-	}
-	
-	public void setTotalTime(LocalTime totalTime) {
-		this.totalTime = totalTime;
-	}
-	
 }
-
+	
+	

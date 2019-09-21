@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -99,7 +100,7 @@ public class FileUtilities {
         	
         	String[] csvString = { placeStr, String.valueOf(runner.getBib_number()),
         			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-        			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(runner.getChipTime()),
+        			runner.getState(), team.getTeamName(), DataUtilities.formatCSVOutputTime(Duration.between(LocalTime.MIDNIGHT, runner.getChipTime())),
         			avgTimeStr, totalTimeStr };
         	
         	csvTeamData.add(csvString);	
