@@ -45,7 +45,7 @@ public class GUI extends JFrame {
 	 */
 	private void initialize() {
 		setResizable(false);
-		setTitle("Filtriranje timskog plasmana");
+		setTitle("Hronometar Team Filtering");
 		setBounds(100, 100, 477, 227);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new CardLayout(0, 0));
@@ -59,19 +59,19 @@ public class GUI extends JFrame {
 		spinnerRunnerCount.setBounds(216, 74, 68, 20);
 		panel.add(spinnerRunnerCount);
 		
-		lblRunnerCount = new JLabel("Takmičara:");
-		lblRunnerCount.setToolTipText("Broj takmičara u okviru tima");
+		lblRunnerCount = new JLabel("Number of competitors:");
+		lblRunnerCount.setToolTipText("The number of competitors within a team");
 		lblRunnerCount.setBounds(32, 77, 148, 14);
 		panel.add(lblRunnerCount);
 		
-		lblInputFileName = new JLabel("Ulazni fajl:");
-		lblInputFileName.setToolTipText("Klikni na dugme izaberi da izabereš ulazni fajl");
+		lblInputFileName = new JLabel("Input file:");
+		lblInputFileName.setToolTipText("Click the Browse button to browse the input file");
 		lblInputFileName.setBounds(32, 31, 68, 14);
 		panel.add(lblInputFileName);
 		
-		btnProcessData = new JButton("Obradi");
+		btnProcessData = new JButton("Process");
 		btnProcessData.addActionListener(new ProcessDataAction());
-		btnProcessData.setToolTipText("Klikni ovde za obradu podataka");
+		btnProcessData.setToolTipText("Click here for data processing");
 
 		btnProcessData.setBounds(174, 130, 125, 23);
 		panel.add(btnProcessData);
@@ -82,9 +82,9 @@ public class GUI extends JFrame {
 		panel.add(txtFieldInputFileName);
 		txtFieldInputFileName.setColumns(10);
 		
-		btnChooseFile = new JButton("Izaberi");
+		btnChooseFile = new JButton("Browse");
 		btnChooseFile.addActionListener(new ChooseFileAction());
-		btnChooseFile.setToolTipText("Klikni ovde da izabereš fajl za obradu");
+		btnChooseFile.setToolTipText("Click here to browse a file to process");
 		btnChooseFile.setBounds(319, 27, 117, 23);
 		panel.add(btnChooseFile);
 		
@@ -95,7 +95,7 @@ public class GUI extends JFrame {
 		if(choosenFile == null)
 		{
 			JOptionPane.showMessageDialog(GUI.this, 
-										"Nema izabranog fajla za obradu");
+					"There is no input file to process.");
 		}
 		else
 		{	
@@ -109,19 +109,19 @@ public class GUI extends JFrame {
 			catch (FileNotFoundException fne) 
 			{
 				fne.printStackTrace();
-				JOptionPane.showMessageDialog(GUI.this, "Traženi fajl nije pronađen ili"
-						+ "\n" + "ne može biti otvoren!");
+				JOptionPane.showMessageDialog(GUI.this, "Chosen file does not exist or"
+						+ "\n" + "could not be opened!");
 				return;	
 			} 
 			catch (IllegalInputHeaderException iihe) 
 			{
 				iihe.printStackTrace();
-				JOptionPane.showMessageDialog(GUI.this, "Zaglavlje izabranog fajla nije podržano!");
+				JOptionPane.showMessageDialog(GUI.this, "The input file header is not supported.");
 				return;
 			}catch (ArrayIndexOutOfBoundsException a)
 			{
 				a.printStackTrace();
-				JOptionPane.showMessageDialog(GUI.this, "Greška pri čitanju fajla, proverite da li je format podataka ispravan!");
+				JOptionPane.showMessageDialog(GUI.this, "Error reading the input file. Check if the data format is correct.");
 				return;
 			}
 			
@@ -138,9 +138,14 @@ public class GUI extends JFrame {
 					
 					ArrayList<Team> sortedTeams = DataUtilities.sortByTotalTime(trimmedTeams);
 
-					outputFileChooser = new JFileChooser();
-					outputFileChooser.setCurrentDirectory(new java.io.File("."));
-					outputFileChooser.setDialogTitle("Sačuvaj fajl");
+			
+					String userDir = System.getProperty("user.home");
+					outputFileChooser = new JFileChooser(userDir +"/Desktop");
+					outputFileChooser.setAcceptAllFileFilterUsed(false);
+				    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "CSV file", "csv");
+				    outputFileChooser.setFileFilter(filter);
+					outputFileChooser.setDialogTitle("Save file");
 					outputFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 					outputFileChooser.setAcceptAllFileFilterUsed(false);
 					
@@ -152,30 +157,31 @@ public class GUI extends JFrame {
 						String outputFileString = outputFilePath + "\\" + outputFileName;
 						
 						FileUtilities.writeCSVFile(sortedTeams, outputFileString);
-						JOptionPane.showMessageDialog(GUI.this, "Obrađen fajl je sačuvan na sledećoj lokaciji:"
+						JOptionPane.showMessageDialog(GUI.this, "The processed file is saved in the following location:"
 								+ "\n" + outputFilePath);
 					}
 					else
 				    {
-				    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali putanju za čuvanje"
-				    			+ "\n" + "obrađenog fajla!");
+				    	JOptionPane.showMessageDialog(GUI.this, "Didn't browse a location to save the processed file.");
 				    }
 				}
 			} 
 			else 
 			{
-				JOptionPane.showMessageDialog(GUI.this, "Došlo je do greške pri učitavanju"
-		    			+ "\n" + "timova iz ulaznog fajla!");
+				JOptionPane.showMessageDialog(GUI.this, "There was an error reading"
+		    			+ "\n" + "teams from the input file!");
 			}
 		}
 	}
 	
 	public void chooseFileAction() 
 	{
-		fileChooser = new JFileChooser();
+		String userDir = System.getProperty("user.home");
+		fileChooser = new JFileChooser(userDir +"/Desktop");
 		fileChooser.setAcceptAllFileFilterUsed(false);
 	    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-	        "CSV File", "csv");
+	        "CSV file", "csv");
+	    fileChooser.setDialogTitle("Browse input file");
 	    fileChooser.setFileFilter(filter);
 	    
 	    int returnVal = fileChooser.showOpenDialog(GUI.this);
@@ -186,7 +192,7 @@ public class GUI extends JFrame {
 	    }
 	    else
 	    {
-	    	JOptionPane.showMessageDialog(GUI.this, "Niste izabrali fajl");
+	    	JOptionPane.showMessageDialog(GUI.this, "Didn't browse the input file.");
 	    	txtFieldInputFileName.setText("");
 	    	choosenFile = null;
 	    }
