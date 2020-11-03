@@ -5,11 +5,11 @@ import java.time.LocalTime;
 public class Runner {
 	
 	
-	private String firstName, lastName, state, gender, yob;
+	private String firstName, lastName, state, gender, yob, teamName;
 	private int bib_number;
 	private LocalTime chipTime;
 	
-	public Runner(String firstName, String lastName, String state, String yob, int bib_number, String gender, LocalTime chipTime) {
+	public Runner(String firstName, String lastName, String state, String yob, int bib_number, String gender, LocalTime chipTime, String teamName) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -18,6 +18,7 @@ public class Runner {
 		this.gender = gender;
 		this.chipTime = chipTime;
 		this.state = state;
+		this.setTeamName(teamName);
 	}
 	
 	public String getState() {
@@ -65,6 +66,14 @@ public class Runner {
 
 	public void setYob(String yob) {
 		this.yob = yob;
+	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
 	}
 
 }
