@@ -21,7 +21,7 @@ import utilities.FileUtilities.DATA_FIELDS;
 
 public class FileParser {
 	
-	public ArrayList<Runner> readRunnersFromFile(File file) throws FileNotFoundException, IllegalInputHeaderException
+	public ArrayList<Runner> readRunnersFromFile(File file) throws IllegalInputHeaderException, IOException
 	{
 		ArrayList<Runner> runners = new ArrayList<Runner>();
 		
@@ -40,48 +40,35 @@ public class FileParser {
             
         String [] nextLine;
         String[] fileHeader;
-        try 
+
+		fileHeader = reader.readNext();
+		
+        if(!compareFileHeaders(FileUtilities.inputTeamsHeader, fileHeader) && !compareFileHeaders(FileUtilities.inputTeamsCommaHeader, fileHeader))
         {
-			fileHeader = reader.readNext();
-			
-            if(!compareFileHeaders(FileUtilities.inputTeamsHeader, fileHeader) && !compareFileHeaders(FileUtilities.inputTeamsCommaHeader, fileHeader))
-            	throw new IllegalInputHeaderException(fileHeader);
-            
-            //Read one line at a time
-            while ((nextLine = reader.readNext()) != null)
-            {
-            	HashMap<DATA_FIELDS, String> dataMap =  getDataDictFromCSVFileLine(nextLine);
-            	Runner currentRunner = parseRunnerFromDataDict(dataMap);
-            	//This person is invalid we need to skip it
-            	if(currentRunner == null)
-            	{
-            		continue;
-            	}
-            	
-            	runners.add(currentRunner);
+        	reader.close();
+        	throw new IllegalInputHeaderException(fileHeader);
+
+        }
+        	
         
-            }
-        } 
-        catch (IOException e1) 
+        //Read one line at a time
+        while ((nextLine = reader.readNext()) != null)
         {
-			e1.printStackTrace();
-			return null;
-		}
-        catch(Exception e)
-        {
-        	e.printStackTrace();
-			return null;
+        	HashMap<DATA_FIELDS, String> dataMap =  getDataDictFromCSVFileLine(nextLine);
+        	Runner currentRunner = parseRunnerFromDataDict(dataMap);
+        	//This person is invalid we need to skip it
+        	if(currentRunner == null)
+        	{
+        		continue;
+        	}
+        	
+        	runners.add(currentRunner);
+    
         }
-        finally
-        {
-			try 
-            {
-                reader.close();
-            } catch (IOException e) 
-            {
-                e.printStackTrace();
-            }
-        }
+       
+
+        reader.close();
+
             
 		return runners;
 	}

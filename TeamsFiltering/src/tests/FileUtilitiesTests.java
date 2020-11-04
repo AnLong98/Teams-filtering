@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ public class FileUtilitiesTests {
 			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("dayumson.csv"));
 			assertEquals(returnedValue.size(), 44);
 		} 
-		catch (FileNotFoundException | IllegalInputHeaderException e) 
+		catch (IllegalInputHeaderException | IOException e) 
 		{
 			fail("File error");
 		}
@@ -44,7 +45,7 @@ public class FileUtilitiesTests {
 			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("team_valid_and_invalid_runners.csv"));
 			assertEquals(returnedValue.get(0).getTeamMembers().size(), 1);
 		} 
-		catch (FileNotFoundException | IllegalInputHeaderException e) 
+		catch (IllegalInputHeaderException | IOException e) 
 		{
 			fail("File error");
 		}
@@ -69,7 +70,7 @@ public class FileUtilitiesTests {
 			assertEquals(expectedRunner.getChipTime(), returnedRunner.getChipTime());
 			assertEquals(expectedRunner.getTeamName(), returnedRunner.getTeamName());
 		} 
-		catch (FileNotFoundException | IllegalInputHeaderException e) 
+		catch (IllegalInputHeaderException | IOException e) 
 		{
 			fail("File error");
 		}

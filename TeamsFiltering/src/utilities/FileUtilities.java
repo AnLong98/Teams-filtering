@@ -19,11 +19,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 import data.Runner;
 import data.Team;
 import exceptions.IllegalInputHeaderException;
+import user_interface.GUI;
 
 public class FileUtilities {
 	public enum DATA_FIELDS { BIB, FIRSTNAME, LASTNAME, SEX, DOB, STATE, TEAMNAME, CHIPTIME };
@@ -110,17 +113,21 @@ public class FileUtilities {
 	}
 	
 	
-	public static ArrayList<Team> getTeamsFromFile(File csvFile) throws FileNotFoundException, IllegalInputHeaderException
+	public static ArrayList<Team> getTeamsFromFile(File csvFile) throws IllegalInputHeaderException, IOException
 	{
+
 		FileParser parser = new FileParser();
 		RunnersSorter sorter = new RunnersSorter();
 		TeamsHandler handler =  new TeamsHandler();	
 
 		ArrayList<Runner> runners =  new ArrayList<Runner>();
-		
+
 		runners = parser.readRunnersFromFile(csvFile);
 		runners = sorter.sortRunnersByTimeAscending(runners);
-		
+			
 		return handler.groupRunnersByTeam(runners);
+			
+
+
 	}
 }
