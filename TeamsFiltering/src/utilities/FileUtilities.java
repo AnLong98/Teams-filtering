@@ -123,6 +123,4 @@ public class FileUtilities {
 		
 		return handler.groupRunnersByTeam(runners);
 	}
-
-
 }
