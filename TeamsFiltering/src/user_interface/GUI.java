@@ -104,7 +104,7 @@ public class GUI extends JFrame {
 			
 			try 
 			{
-				parsedTeams = FileUtilities.ParseCSVFile(choosenFile);
+				parsedTeams = FileUtilities.getTeamsFromFile(choosenFile);
 			} 
 			catch (FileNotFoundException fne) 
 			{

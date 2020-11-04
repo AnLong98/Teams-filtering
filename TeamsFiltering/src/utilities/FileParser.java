@@ -67,6 +67,11 @@ public class FileParser {
 			e1.printStackTrace();
 			return null;
 		}
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+			return null;
+        }
         finally
         {
 			try 
@@ -134,17 +139,32 @@ public class FileParser {
 		SimpleDateFormat formatShorter = new SimpleDateFormat("yyyy");
 		LocalTime localTime;
 		String birthYear = "";
-		String firstName = dataDict.get(DATA_FIELDS.FIRSTNAME);
-		String lastName = dataDict.get(DATA_FIELDS.LASTNAME);
-		String state = dataDict.get(DATA_FIELDS.STATE);
-		String sex = dataDict.get(DATA_FIELDS.SEX).substring(0, 1);
-		int bibNumber = Integer.parseInt(dataDict.get(DATA_FIELDS.BIB));
-		String teamName = dataDict.get(DATA_FIELDS.TEAMNAME);
+		String sex;
+		String firstName;
+		String lastName;
+		String state;
+		int bibNumber;
+		String teamName;
+		
+		try
+		{		
+			sex = dataDict.get(DATA_FIELDS.SEX).substring(0, 1);
+			firstName = dataDict.get(DATA_FIELDS.FIRSTNAME);
+			lastName = dataDict.get(DATA_FIELDS.LASTNAME);
+			state = dataDict.get(DATA_FIELDS.STATE);
+			bibNumber = Integer.parseInt(dataDict.get(DATA_FIELDS.BIB));
+			teamName = dataDict.get(DATA_FIELDS.TEAMNAME);
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 		
 		if(teamName.isEmpty() || teamName == null)
     	{
     		return null;
     	}
+		
 		
 		try
 		{

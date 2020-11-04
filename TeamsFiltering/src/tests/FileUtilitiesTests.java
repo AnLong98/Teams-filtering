@@ -22,13 +22,12 @@ public class FileUtilitiesTests {
 
 	
 	
-	/* Uncomment after parsing methods are finished
 	@Test
 	public void parseCSVFile_fileWith44Teams_assertTeamCount()
 	{
 		try 
 		{
-			ArrayList<Team> returnedValue = FileUtilities.ParseCSVFile(new File("dayumson.csv"));
+			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("dayumson.csv"));
 			assertEquals(returnedValue.size(), 44);
 		} 
 		catch (FileNotFoundException | IllegalInputHeaderException e) 
@@ -42,7 +41,7 @@ public class FileUtilitiesTests {
 	{
 		try 
 		{
-			ArrayList<Team> returnedValue = FileUtilities.ParseCSVFile(new File("team_valid_and_invalid_runners.csv"));
+			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("team_valid_and_invalid_runners.csv"));
 			assertEquals(returnedValue.get(0).getTeamMembers().size(), 1);
 		} 
 		catch (FileNotFoundException | IllegalInputHeaderException e) 
@@ -54,11 +53,11 @@ public class FileUtilitiesTests {
 	@Test
 	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerInfo()
 	{
-		Runner expectedRunner = new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32));
+		Runner expectedRunner = new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32), "DAYUMSON");
 		
 		try 
 		{
-			ArrayList<Team> returnedValue = FileUtilities.ParseCSVFile(new File("utf8_multiple_runners.csv"));
+			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("utf8_multiple_runners.csv"));
 			Runner returnedRunner = returnedValue.get(0).getTeamMembers().get(0);
 			
 			assertEquals(expectedRunner.getBib_number(), returnedRunner.getBib_number());
@@ -68,13 +67,14 @@ public class FileUtilitiesTests {
 			assertEquals(expectedRunner.getGender(), returnedRunner.getGender());
 			assertEquals(expectedRunner.getState(), returnedRunner.getState());
 			assertEquals(expectedRunner.getChipTime(), returnedRunner.getChipTime());
+			assertEquals(expectedRunner.getTeamName(), returnedRunner.getTeamName());
 		} 
 		catch (FileNotFoundException | IllegalInputHeaderException e) 
 		{
 			fail("File error");
 		}
 	}
-	*/
+	
 	
 	@Test
 	public void writeCSVFile_sortedTeams_returnsTrue()

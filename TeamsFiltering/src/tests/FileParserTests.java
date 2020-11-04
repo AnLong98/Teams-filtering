@@ -1,8 +1,6 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -46,9 +44,28 @@ public class FileParserTests {
 	}
 	
 	@Test
+	public void getDataDictFromCSVFileLine_leadingAndTrailingWhitespacesInTeamName_assertContent() {
+		
+		String[] dataLine = {" 110", "NataÅ¡a", "Naletina", "Female", "1983", "SRB", "  adidas runners beograd  ", "3:20:52"};
+		
+		FileParser parser =  new FileParser();
+		
+		HashMap<DATA_FIELDS, String> returnValue =parser.getDataDictFromCSVFileLine(dataLine);
+		
+		assertEquals(returnValue.get(DATA_FIELDS.BIB), "110");
+		assertEquals(returnValue.get(DATA_FIELDS.FIRSTNAME), "NataÅ¡a");
+		assertEquals(returnValue.get(DATA_FIELDS.LASTNAME), "Naletina");
+		assertEquals(returnValue.get(DATA_FIELDS.SEX), "Female");
+		assertEquals(returnValue.get(DATA_FIELDS.DOB), "1983");
+		assertEquals(returnValue.get(DATA_FIELDS.STATE), "SRB");
+		assertEquals(returnValue.get(DATA_FIELDS.TEAMNAME), "adidas runners beograd");
+		assertEquals(returnValue.get(DATA_FIELDS.CHIPTIME), "3:20:52");	
+	}
+	
+	@Test
 	public void getDataDictFromCSVFileLine_leadingWhitespaces_assertContent() {
 		
-		String[] dataLine = {" 110", "NataÅ¡a", "Naletina", "Female", "1983", "SRB", "adidas runners beograd", " 3:20:52"};
+		String[] dataLine = {" 110", "NataÅ¡a", "Naletina", "Female", "1983", "SRB", "  adidas runners beograd", " 3:20:52"};
 		
 		FileParser parser =  new FileParser();
 		
@@ -243,7 +260,7 @@ public class FileParserTests {
 		String[] firstHeader = { "Bib #", "Last Name", "First Name", "Sex", "DOB", "State", "Team Name", "Chip Time" };
 		FileParser parser =  new FileParser();
 		
-		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+		assertFalse(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
 	}
 	
 	@Test
@@ -270,7 +287,7 @@ public class FileParserTests {
 		String[] firstHeader = { "Bib #", "First Name", "Last Name", "Sex", "DOB", "State", "Team Name", "Chip Time", "" };
 		FileParser parser =  new FileParser();
 		
-		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsCommaHeader));
 	}
 	
 	@Test
@@ -279,7 +296,7 @@ public class FileParserTests {
 		String[] firstHeader = { " Bib #" , " First Name" , " Last Name" , " Sex" ," DOB" , " State" , " Team Name", " Chip Time", " " };
 		FileParser parser =  new FileParser();
 		
-		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsCommaHeader));
 	}
 	
 	@Test
@@ -288,7 +305,7 @@ public class FileParserTests {
 		String[] firstHeader = { "\u00A0Bib #" , "\u00A0First Name" , "\u00A0Last Name" , "\u00A0Sex" ,"\u00A0DOB" , "\u00A0State" , "\u00A0Team Name", "\u00A0Chip Time", "\u00A0" };
 		FileParser parser =  new FileParser();
 		
-		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsHeader));
+		assertTrue(parser.compareFileHeaders(firstHeader, FileUtilities.inputTeamsCommaHeader));
 	}
 
 }

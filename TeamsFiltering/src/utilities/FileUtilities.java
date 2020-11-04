@@ -110,96 +110,19 @@ public class FileUtilities {
 	}
 	
 	
-	/*public static ArrayList<Team> ParseCSVFile(File csvFile) throws FileNotFoundException, IllegalInputHeaderException
+	public static ArrayList<Team> getTeamsFromFile(File csvFile) throws FileNotFoundException, IllegalInputHeaderException
 	{
-		CSVReader reader = null;
-		ArrayList<Team> teams = new ArrayList<Team>();
+		FileParser parser = new FileParser();
+		RunnersSorter sorter = new RunnersSorter();
+		TeamsHandler handler =  new TeamsHandler();	
+
+		ArrayList<Runner> runners =  new ArrayList<Runner>();
 		
-		//Check if file is empty
-		if (csvFile.length() == 0)
-		{
-			return null;
-		}
+		runners = parser.readRunnersFromFile(csvFile);
+		runners = sorter.sortRunnersByTimeAscending(runners);
 		
-		FileInputStream fis = new FileInputStream(csvFile);
-        InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF8"));
-        reader = new CSVReader(isr, ',');
-		
-            
-        String [] nextLine;
-         //Keep this here for now, we don't know if we will need it later
-        String[] fileHeader;
-        try 
-        {
-			fileHeader = reader.readNext();
-			
-            if(!compareFileHeaders(inputTeamsHeader, fileHeader) && !compareFileHeaders(inputTeamsCommaHeader, fileHeader))
-            	throw new IllegalInputHeaderException(fileHeader);
-            
-            Team currentTeam = null;
-          //Read one line at a time
-            while ((nextLine = reader.readNext()) != null)
-            {
-            	HashMap<DATA_FIELDS, String> dataMap =  getDataDictFromCSVFileLine(nextLine);
-            	String teamName = dataMap.get(DATA_FIELDS.TEAMNAME);
-            	
-            	//If runner has no team he is to be ignored
-            	if(teamName.isEmpty() || teamName == null)
-            	{
-            		continue;
-            	}
-            	
-            	Runner currentRunner = ParseRunnerFromDataDict(dataMap);
-            	//This person is invalid we need to skip it
-            	if(currentRunner == null)
-            	{
-            		continue;
-            	}
-            	
-            	//We need to create a new team cause current is non existent
-            	if(currentTeam == null)
-            	{
-            		currentTeam = new Team(teamName);
-            		currentTeam.AddRunnerToTeam(currentRunner);
-            	}
-            	else if(teamName.equals(currentTeam.getTeamName()))
-            	{
-            		//If parsed runner is member of the same team as last parsed runner put him there
-            		currentTeam.AddRunnerToTeam(currentRunner);	
-            	}
-            	else if( !teamName.equals(currentTeam.getTeamName()) )
-            	{
-            		//If we reached a new team then add old one to the list
-            		teams.add(currentTeam);
-            		currentTeam = new Team(teamName);
-            		currentTeam.AddRunnerToTeam(currentRunner);
-            	}	
-            }
-            //Add the last parsed team
-            teams.add(currentTeam);
-        } 
-        catch (IOException e1) 
-        {
-			e1.printStackTrace();
-			return null;
-		}
-        finally
-        {
-			try 
-            {
-                reader.close();
-            } catch (IOException e) 
-            {
-                e.printStackTrace();
-            }
-        }
-            
-        return teams;
-	}*/
-	
-	
-	
-	
-	
+		return handler.groupRunnersByTeam(runners);
+	}
+
 
 }
