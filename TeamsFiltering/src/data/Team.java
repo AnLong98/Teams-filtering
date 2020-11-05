@@ -53,6 +53,38 @@ public class Team {
 		return true;
 	}
 	
+	public boolean TrimTeam(int malesRequired, int femalesRequired)
+	{
+		if(malesRequired + femalesRequired > teamMembers.size())return false;
+		
+		ArrayList<Runner> newTeam = new ArrayList<Runner>();
+		
+		
+		for(Runner runner : teamMembers)
+		{
+			if(runner.getGender().equals("M") && malesRequired > 0)
+			{
+				newTeam.add(runner);
+				malesRequired--;
+			}
+			
+			if(runner.getGender().equals("F") && femalesRequired > 0)
+			{
+				newTeam.add(runner);
+				femalesRequired--;
+			}
+			
+			if(malesRequired + femalesRequired == 0)
+			{
+				teamMembers = newTeam;
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
 	public void AddRunnerToTeam(Runner runner)
 	{
 		teamMembers.add(runner);

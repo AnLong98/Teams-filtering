@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import contracts.ITeamTrimming;
 import controller.ChooseFileAction;
 import controller.ProcessDataAction;
 import data.Team;
@@ -92,7 +93,7 @@ public class GUI extends JFrame {
 		setVisible(true);
 	}
 	
-	public void processDataAction() {
+	public void processDataAction(ITeamTrimming teamTrimmer) {
 		if(choosenFile == null)
 		{
 			JOptionPane.showMessageDialog(GUI.this, 
@@ -134,7 +135,7 @@ public class GUI extends JFrame {
 			{
 				if (parsedTeams.size() > 0) 
 				{
-					ArrayList<Team> trimmedTeams = DataUtilities.removeExtraMembersFromTeams(parsedTeams, runnersInTeam);
+					ArrayList<Team> trimmedTeams = teamTrimmer.trimTeamsToSizeByNumber(parsedTeams, runnersInTeam);
 					for(Team team : trimmedTeams) 
 					{
 						team.calculateTeamTotalTime();

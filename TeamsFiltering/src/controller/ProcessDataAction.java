@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import user_interface.GUI;
+import utilities.TeamsHandler;
 
 public class ProcessDataAction extends AbstractAction {
 
@@ -16,7 +17,7 @@ public class ProcessDataAction extends AbstractAction {
 		JComponent c = (JComponent) e.getSource();
 		GUI frame = (GUI) SwingUtilities.getRoot(c);
 		
-		frame.processDataAction();
+		frame.processDataAction(new TeamsHandler());
 	}
 
 }

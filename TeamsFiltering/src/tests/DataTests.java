@@ -80,6 +80,78 @@ public class DataTests {
 		assertEquals(team.getTeamMembers().get(3).getBib_number(), 103);
 	}
 	
+	@Test 
+	public void trimTeam_allMalesEnoughMembers_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertTrue(pedjaTeam.TrimTeam(3,  0));
+		assertEquals(pedjaTeam.getTeamMembers().get(0).getBib_number(), 100);
+		assertEquals(pedjaTeam.getTeamMembers().get(1).getBib_number(), 102);
+		assertEquals(pedjaTeam.getTeamMembers().get(2).getBib_number(), 103);
+		
+		
+	}
+	
+	@Test 
+	public void trimTeam_3Males2FemalesEnoughBoth_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertTrue(pedjaTeam.TrimTeam(3,  2));
+		assertEquals(pedjaTeam.getTeamMembers().get(0).getBib_number(), 100);
+		assertEquals(pedjaTeam.getTeamMembers().get(1).getBib_number(), 101);
+		assertEquals(pedjaTeam.getTeamMembers().get(2).getBib_number(), 102);
+		assertEquals(pedjaTeam.getTeamMembers().get(3).getBib_number(), 103);
+		assertEquals(pedjaTeam.getTeamMembers().get(4).getBib_number(), 105);
+		
+	}
+	
+	@Test 
+	public void trimTeam_2Males3FemalesNotEnoughFemales_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertFalse(pedjaTeam.TrimTeam(2,  3));
+		
+	}
+	
+	@Test 
+	public void trimTeam_5Males3FemalesNotEnoughBoth_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertFalse(pedjaTeam.TrimTeam(5,  3));
+		
+	}
+	
+	@Test 
+	public void trimTeam_5Males2FemalesNotEnoughMales_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertFalse(pedjaTeam.TrimTeam(5,  2));
+		
+	}
+	
+	@Test 
+	public void trimTeam_allFemalesEnoughMembers_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertTrue(pedjaTeam.TrimTeam(0,  2));
+		assertEquals(pedjaTeam.getTeamMembers().get(0).getBib_number(), 101);
+		assertEquals(pedjaTeam.getTeamMembers().get(1).getBib_number(), 105);
+	}
+	
+	@Test 
+	public void trimTeam_tooSmallTeam_assertTrimmed()
+	{
+		Team pedjaTeam = TeamsForTest.createPedjaTeamRaw();
+		
+		assertFalse(pedjaTeam.TrimTeam(5,  5));
+	}
+	
 	@Test
 	public void calculateTeamTotalTime_zeroTeamMembers_returnsFalse()
 	{

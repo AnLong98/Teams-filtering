@@ -7,16 +7,30 @@ import data.Team;
 
 public class TeamsForTest {
 	
+	public static Team createPedjaTeamRaw() 
+	{
+		Team team = new Team("Pedja team");
+		
+		team.AddRunnerToTeam(new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "F", LocalTime.of(2, 20, 33), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predragurda", "Glavašurda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predragetina", "Glavašetina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predrager", "Glavašer", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "F", LocalTime.of(2, 20, 37), "Pedja team"));
+		
+		return team;
+	}
+	
 	public static Team createPedjaTeam() 
 	{
 		Team team = new Team("Pedja team");
 		
 		team.AddRunnerToTeam(new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32), "Pedja team"));
-		team.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "M", LocalTime.of(2, 20, 33), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predragica", "Glavašica", "SRB", "1997", 101, "F", LocalTime.of(2, 20, 33), "Pedja team"));
 		team.AddRunnerToTeam(new Runner("Predragurda", "Glavašurda", "SRB", "1996", 102, "M", LocalTime.of(2, 20, 34), "Pedja team"));
 		team.AddRunnerToTeam(new Runner("Predragetina", "Glavašetina", "SRB", "1995", 103, "M", LocalTime.of(2, 20, 35), "Pedja team"));
 		team.AddRunnerToTeam(new Runner("Predrager", "Glavašer", "SRB", "1994", 104, "M", LocalTime.of(2, 20, 36), "Pedja team"));
-		team.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "M", LocalTime.of(2, 20, 37), "Pedja team"));
+		team.AddRunnerToTeam(new Runner("Predraga", "Glavaša", "SRB", "1993", 105, "F", LocalTime.of(2, 20, 37), "Pedja team"));
 		
 		team.TrimTeam(4);
 		team.calculateTeamTotalTime();
