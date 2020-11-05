@@ -15,11 +15,12 @@ import java.util.Date;
 import java.util.HashMap;
 
 import au.com.bytecode.opencsv.CSVReader;
+import contracts.IFileParsing;
 import data.Runner;
 import exceptions.IllegalInputHeaderException;
 import utilities.FileUtilities.DATA_FIELDS;
 
-public class FileParser {
+public class FileParser implements IFileParsing{
 	
 	public ArrayList<Runner> readRunnersFromFile(File file) throws IllegalInputHeaderException, IOException
 	{

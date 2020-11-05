@@ -10,8 +10,10 @@ import org.junit.Test;
 import data.Runner;
 import data.Team;
 import utilities.TeamsForTest;
+import utilities.TimeFormatter;
 
 public class DataTests {
+	private TimeFormatter formatter =  new TimeFormatter();
 	
 	@Test
 	public void trimTeam_teamSizeBigger_returnsTrue()
@@ -208,7 +210,7 @@ public class DataTests {
 		Team team = new Team("Test team");
 		team.calculateTeamTotalTime();
 		
-		assertFalse(team.calculateTeamAverageTime());
+		assertFalse(team.calculateTeamAverageTime(formatter));
 	}
 	
 	@Test
@@ -217,7 +219,7 @@ public class DataTests {
 		Team team = new Team("Test team");
 		team.calculateTeamTotalTime();
 		
-		team.calculateTeamAverageTime();
+		team.calculateTeamAverageTime(formatter);
 		
 		assertEquals(LocalTime.MIDNIGHT.toSecondOfDay(), team.getAverageTime().getSeconds());
 	}
@@ -235,7 +237,7 @@ public class DataTests {
 		team.AddRunnerToTeam(new Runner("Predraga", "Glava�a", "SRB", "1993", 105, "Male", LocalTime.of(2, 20, 37), "Test team"));
 		team.calculateTeamTotalTime();
 		
-		assertTrue(team.calculateTeamAverageTime());
+		assertTrue(team.calculateTeamAverageTime(formatter));
 	}
 	
 	@Test
@@ -251,7 +253,7 @@ public class DataTests {
 		team.AddRunnerToTeam(new Runner("Predraga", "Glava�a", "SRB", "1993", 105, "Male", LocalTime.of(2, 20, 37), "Test team"));
 		team.calculateTeamTotalTime();
 		
-		team.calculateTeamAverageTime();
+		team.calculateTeamAverageTime(formatter);
 		
 		assertEquals(LocalTime.parse("02:20:35").toSecondOfDay(), team.getAverageTime().getSeconds());
 	}

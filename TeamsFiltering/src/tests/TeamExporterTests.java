@@ -1,85 +1,22 @@
 package tests;
 
 import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.junit.Test;
-
-import data.Runner;
 import data.Team;
-import exceptions.IllegalInputHeaderException;
-import utilities.DataUtilities;
-import utilities.FileUtilities;
 import utilities.TeamsForTest;
-import utilities.FileUtilities.DATA_FIELDS;
+import utilities.TeamsSorter;
+import utilities.TimeFormatter;
 
-public class FileUtilitiesTests {
+import utilities.TeamExporter;
 
-	
-	
-	@Test
-	public void parseCSVFile_fileWith44Teams_assertTeamCount()
-	{
-		try 
-		{
-			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("dayumson.csv"));
-			assertEquals(returnedValue.size(), 44);
-		} 
-		catch (IllegalInputHeaderException | IOException e) 
-		{
-			fail("File error");
-		}
-	}
-	
-	@Test
-	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerCount()
-	{
-		try 
-		{
-			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("team_valid_and_invalid_runners.csv"));
-			assertEquals(returnedValue.get(0).getTeamMembers().size(), 1);
-		} 
-		catch (IllegalInputHeaderException | IOException e) 
-		{
-			fail("File error");
-		}
-	}
-	
-	@Test
-	public void parseCSVFile_teamWithOneQualifiedRunner_assertRunnerInfo()
-	{
-		Runner expectedRunner = new Runner("Predrag", "Glavaš", "SRB", "1998", 100, "M", LocalTime.of(2, 20, 32), "DAYUMSON");
-		
-		try 
-		{
-			ArrayList<Team> returnedValue = FileUtilities.getTeamsFromFile(new File("utf8_multiple_runners.csv"));
-			Runner returnedRunner = returnedValue.get(0).getTeamMembers().get(0);
-			
-			assertEquals(expectedRunner.getBib_number(), returnedRunner.getBib_number());
-			assertEquals(expectedRunner.getFirstName(), returnedRunner.getFirstName());
-			assertEquals(expectedRunner.getLastName(), returnedRunner.getLastName());
-			assertEquals(expectedRunner.getYob(), returnedRunner.getYob());
-			assertEquals(expectedRunner.getGender(), returnedRunner.getGender());
-			assertEquals(expectedRunner.getState(), returnedRunner.getState());
-			assertEquals(expectedRunner.getChipTime(), returnedRunner.getChipTime());
-			assertEquals(expectedRunner.getTeamName(), returnedRunner.getTeamName());
-		} 
-		catch (IllegalInputHeaderException | IOException e) 
-		{
-			fail("File error");
-		}
-	}
-	
+public class TeamExporterTests {
+	private TeamExporter exporter = new TeamExporter(new TimeFormatter());
 	
 	@Test
 	public void writeCSVFile_sortedTeams_returnsTrue()
 	{
+		TeamsSorter sorter =  new TeamsSorter();
 		ArrayList<Team> teams = new ArrayList<Team>();
 		
 		Team team1 = TeamsForTest.createPedjaTeam();
@@ -90,9 +27,9 @@ public class FileUtilitiesTests {
 		teams.add(team1);
 		teams.add(team3);
 		
-		teams = DataUtilities.sortByTotalTime(teams);
+		teams = sorter.sortByTotalTime(teams);
 		
-		assertTrue(FileUtilities.writeCSVFile(teams, "test"));
+		assertTrue(exporter.exportTeamsToCSVFile(teams, "test"));
 	}
 	
 	@Test
@@ -101,7 +38,7 @@ public class FileUtilitiesTests {
 		Team team1 = TeamsForTest.createPedjaTeam();
 		int place = 1;
 		
-		ArrayList<String[]> csvData = FileUtilities.getCSVDataFromTeam(team1, place);
+		ArrayList<String[]> csvData = exporter.getCSVDataFromTeam(team1, place);
 		
 		String[] receivedDataFirst  = csvData.get(0);
 		String[] expectedDataFirst = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};

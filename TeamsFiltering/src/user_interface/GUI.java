@@ -17,12 +17,14 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import contracts.ITeamImporting;
 import contracts.ITeamTrimming;
+import contracts.ITeamsExporting;
+import contracts.ITeamsFiltering;
 import controller.ChooseFileAction;
 import controller.ProcessDataAction;
 import data.Team;
 import exceptions.IllegalInputHeaderException;
-import utilities.DataUtilities;
 import utilities.FileUtilities;
 
 public class GUI extends JFrame {
@@ -93,7 +95,7 @@ public class GUI extends JFrame {
 		setVisible(true);
 	}
 	
-	public void processDataAction(ITeamTrimming teamTrimmer) {
+	public void processDataAction(ITeamImporting importer, ITeamsFiltering teamsFilter, ITeamsExporting exporter) {
 		if(choosenFile == null)
 		{
 			JOptionPane.showMessageDialog(GUI.this, 
@@ -106,7 +108,7 @@ public class GUI extends JFrame {
 			
 			try 
 			{
-				parsedTeams = FileUtilities.getTeamsFromFile(choosenFile);
+				parsedTeams = importer.getTeamsFromFile(choosenFile);
 			} 
 			catch (IOException fne) 
 			{
@@ -135,15 +137,7 @@ public class GUI extends JFrame {
 			{
 				if (parsedTeams.size() > 0) 
 				{
-					ArrayList<Team> trimmedTeams = teamTrimmer.trimTeamsToSizeByNumber(parsedTeams, runnersInTeam);
-					for(Team team : trimmedTeams) 
-					{
-						team.calculateTeamTotalTime();
-						team.calculateTeamAverageTime();
-					}
-					
-					ArrayList<Team> sortedTeams = DataUtilities.sortByTotalTime(trimmedTeams);
-
+					ArrayList<Team> filteredTeams = teamsFilter.filterTeamsToSizeByNumber(parsedTeams, runnersInTeam);
 			
 					String userDir = System.getProperty("user.home");
 					outputFileChooser = new JFileChooser(userDir +"/Desktop");
@@ -162,7 +156,7 @@ public class GUI extends JFrame {
 						String outputFileName = outputFileChooser.getSelectedFile().getName();
 						String outputFileString = outputFilePath + "\\" + outputFileName;
 						
-						FileUtilities.writeCSVFile(sortedTeams, outputFileString);
+						exporter.exportTeamsToCSVFile(filteredTeams, outputFileString);
 						JOptionPane.showMessageDialog(GUI.this, "The processed file is saved in the following location:"
 								+ "\n" + outputFilePath);
 					}

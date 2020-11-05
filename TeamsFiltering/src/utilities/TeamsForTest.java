@@ -6,6 +6,7 @@ import data.Runner;
 import data.Team;
 
 public class TeamsForTest {
+	private static TimeFormatter formatter = new TimeFormatter();
 	
 	public static Team createPedjaTeamRaw() 
 	{
@@ -34,7 +35,7 @@ public class TeamsForTest {
 		
 		team.TrimTeam(4);
 		team.calculateTeamTotalTime();
-		team.calculateTeamAverageTime();
+		team.calculateTeamAverageTime(formatter);
 		
 		return team;
 	}
@@ -54,7 +55,7 @@ public class TeamsForTest {
 		
 		team.TrimTeam(4);
 		team.calculateTeamTotalTime();
-		team.calculateTeamAverageTime();
+		team.calculateTeamAverageTime(formatter);
 		
 		return team;
 	}
@@ -70,7 +71,7 @@ public class TeamsForTest {
 		
 		team.TrimTeam(4);
 		team.calculateTeamTotalTime();
-		team.calculateTeamAverageTime();
+		team.calculateTeamAverageTime(formatter);
 		
 		return team;
 	}
@@ -88,7 +89,7 @@ public class TeamsForTest {
 		
 		team.TrimTeam(4);
 		team.calculateTeamTotalTime();
-		team.calculateTeamAverageTime();
+		team.calculateTeamAverageTime(formatter);
 		
 		return team;
 	}
