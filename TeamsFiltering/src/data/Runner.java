@@ -11,13 +11,13 @@ public class Runner {
 	
 	public Runner(String firstName, String lastName, String state, String yob, int bib_number, String gender, LocalTime chipTime, String teamName) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.yob = yob;
-		this.bib_number = bib_number;
-		this.gender = gender;
-		this.chipTime = chipTime;
-		this.state = state;
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+		this.setYob(yob);
+		this.setBib_number(bib_number);
+		this.setGender(gender);
+		this.setChipTime(chipTime);
+		this.setState(state);
 		this.setTeamName(teamName);
 	}
 	

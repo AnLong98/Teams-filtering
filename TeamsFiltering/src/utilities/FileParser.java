@@ -112,9 +112,7 @@ public class FileParser {
 		dataMap.put(DATA_FIELDS.DOB, line[4].trim());
 		dataMap.put(DATA_FIELDS.STATE, line[5].trim());
 		dataMap.put(DATA_FIELDS.TEAMNAME, line[6].trim());
-		dataMap.put(DATA_FIELDS.CHIPTIME,  line[7].trim());
-		
-		
+		dataMap.put(DATA_FIELDS.CHIPTIME,  line[7].trim());	
 		
 		return dataMap;
 	}
