@@ -15,6 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import contracts.ITeamImporting;
@@ -22,10 +25,14 @@ import contracts.ITeamTrimming;
 import contracts.ITeamsExporting;
 import contracts.ITeamsFiltering;
 import controller.ChooseFileAction;
+import controller.FemaleSpinnerChangeListener;
+import controller.MaleSpinnerChangeListener;
 import controller.ProcessDataAction;
+import controller.RunnersSpinnerChangeListener;
 import data.Team;
 import exceptions.IllegalInputHeaderException;
 import utilities.FileUtilities;
+import javax.swing.SpinnerListModel;
 
 public class GUI extends JFrame {
 
@@ -36,6 +43,7 @@ public class GUI extends JFrame {
 	private JLabel lblRunnerCount, lblInputFileName;
 	private JFileChooser fileChooser, outputFileChooser;
 	private File choosenFile, outputFile;
+	private JSpinner spinnerMalesCount, spinnerFemalesCount;
 
 	/**
 	 * Create the application.
@@ -50,7 +58,7 @@ public class GUI extends JFrame {
 	private void initialize() {
 		setResizable(false);
 		setTitle("Hronometar Team Filtering");
-		setBounds(100, 100, 477, 227);
+		setBounds(100, 100, 477, 193);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -61,11 +69,12 @@ public class GUI extends JFrame {
 		spinnerRunnerCount = new JSpinner();
 		spinnerRunnerCount.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
 		spinnerRunnerCount.setBounds(216, 74, 68, 20);
+		spinnerRunnerCount.addChangeListener(new RunnersSpinnerChangeListener());
 		panel.add(spinnerRunnerCount);
 		
 		lblRunnerCount = new JLabel("Number of competitors:");
 		lblRunnerCount.setToolTipText("The number of competitors within a team");
-		lblRunnerCount.setBounds(32, 77, 148, 14);
+		lblRunnerCount.setBounds(31, 77, 148, 14);
 		panel.add(lblRunnerCount);
 		
 		lblInputFileName = new JLabel("Input file:");
@@ -77,7 +86,7 @@ public class GUI extends JFrame {
 		btnProcessData.addActionListener(new ProcessDataAction());
 		btnProcessData.setToolTipText("Click here for data processing");
 
-		btnProcessData.setBounds(174, 130, 125, 23);
+		btnProcessData.setBounds(318, 125, 125, 23);
 		panel.add(btnProcessData);
 		
 		txtFieldInputFileName = new JTextField();
@@ -92,9 +101,37 @@ public class GUI extends JFrame {
 		btnChooseFile.setBounds(319, 27, 117, 23);
 		panel.add(btnChooseFile);
 		
+		JLabel lblSex = new JLabel("Sex:");
+		lblSex.setToolTipText("The number of competitors within a team");
+		lblSex.setBounds(31, 129, 34, 14);
+		panel.add(lblSex);
+		
+		JLabel lblM = new JLabel("M");
+		lblM.setToolTipText("The number of competitors within a team");
+		lblM.setBounds(91, 129, 26, 14);
+		panel.add(lblM);
+		
+		spinnerMalesCount = new JSpinner();
+		spinnerMalesCount.setModel(new SpinnerCircularListModel(new String[] {"-", "0", "1", "2"}));
+		spinnerMalesCount.setBounds(127, 126, 39, 20);
+		spinnerMalesCount.addChangeListener(new MaleSpinnerChangeListener());
+		panel.add(spinnerMalesCount);
+		
+		JLabel lblF = new JLabel("|             F");
+		lblF.setToolTipText("The number of competitors within a team");
+		lblF.setBounds(176, 129, 58, 14);
+		panel.add(lblF);
+		
+		spinnerFemalesCount = new JSpinner();
+		spinnerFemalesCount.setModel(new SpinnerCircularListModel(new String[] {"-", "0", "1", "2"}));
+		spinnerFemalesCount.setBounds(244, 126, 39, 20);
+		spinnerFemalesCount.addChangeListener(new FemaleSpinnerChangeListener());
+		panel.add(spinnerFemalesCount);
+		
 		setVisible(true);
 	}
 	
+
 	public void processDataAction(ITeamImporting importer, ITeamsFiltering teamsFilter, ITeamsExporting exporter) {
 		if(choosenFile == null)
 		{
@@ -103,12 +140,12 @@ public class GUI extends JFrame {
 		}
 		else
 		{	
-			int runnersInTeam = (int) spinnerRunnerCount.getValue();
 			ArrayList<Team> parsedTeams = null;
 			
 			try 
 			{
 				parsedTeams = importer.getTeamsFromFile(choosenFile);
+				
 			} 
 			catch (IOException fne) 
 			{
@@ -137,7 +174,7 @@ public class GUI extends JFrame {
 			{
 				if (parsedTeams.size() > 0) 
 				{
-					ArrayList<Team> filteredTeams = teamsFilter.filterTeamsToSizeByNumber(parsedTeams, runnersInTeam);
+					ArrayList<Team> filteredTeams = filterTeams(teamsFilter, parsedTeams);
 			
 					String userDir = System.getProperty("user.home");
 					outputFileChooser = new JFileChooser(userDir +"/Desktop");
@@ -197,7 +234,78 @@ public class GUI extends JFrame {
 	    	choosenFile = null;
 	    }
 	}
+	
+	public void updateGenderSpinnersModel(int value)
+	{
+		String[] modelValuesMale = new String[value + 2];
+		String[] modelValuesFemale = new String[value + 2];
+		modelValuesMale[0] = "-";
+		modelValuesFemale[0] = "-";
+		
+		for(int i = 0; i <= value; i++)
+		{
+			modelValuesMale[i + 1] =  Integer.toString(i) ;
+			modelValuesFemale[i + 1] =  Integer.toString(i) ;
+		}
+		
+		spinnerMalesCount.setModel(new SpinnerCircularListModel(modelValuesMale));
+		spinnerFemalesCount.setModel(new SpinnerCircularListModel(modelValuesFemale));
+	}
+	
+	public void updateFemaleSpinnerValue(String maleValue)
+	{
+		if(maleValue.equals("-"))
+		{
+			spinnerFemalesCount.getModel().setValue("-");
+		}else
+		{
+			int intValue = Integer.parseInt(maleValue);
+			int runnersInTeam = (int) spinnerRunnerCount.getValue();
+			spinnerFemalesCount.getModel().setValue(Integer.toString(runnersInTeam - intValue));
+		}
+	
+	}
+	
+	public void updateMaleSpinnerValue(String femaleValue)
+	{
+		if(femaleValue.equals("-"))
+		{
+			spinnerMalesCount.getModel().setValue("-");
+		}
+		else
+		{
+			int intValue = Integer.parseInt(femaleValue);
+			int runnersInTeam = (int) spinnerRunnerCount.getValue();
+			spinnerMalesCount.getModel().setValue(Integer.toString(runnersInTeam - intValue));
+		}
+	
+	}
 
+	public ArrayList<Team> filterTeams(ITeamsFiltering teamsFilter, ArrayList<Team> parsedTeams)
+	{
+		try
+		{
+		
+			int runnersInTeam = (int) spinnerRunnerCount.getValue();
+			String valueMales = (String) spinnerMalesCount.getValue();
+			String valueFemales = (String) spinnerFemalesCount.getValue();
+			
+			if(valueMales.equals("-"))
+			{
+				return teamsFilter.filterTeamsToSizeByNumber(parsedTeams, runnersInTeam);
+			}else
+			{
+				return teamsFilter.filterTeamsToSizeByGender(parsedTeams, Integer.parseInt(valueMales), Integer.parseInt(valueFemales));
+			}
+		}catch(Exception ex)
+		{
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(GUI.this, "There was an error with team size choice or sex choice.");
+			return null;
+		}
+		
+	}
+	
 	
 	public JTextField getTxtFieldInputFileName() {
 		return txtFieldInputFileName;
@@ -255,5 +363,4 @@ public class GUI extends JFrame {
 	public void setLblInputFileName(JLabel lblInputFileName) {
 		this.lblInputFileName = lblInputFileName;
 	}
-
 }

@@ -34,8 +34,14 @@ public class TeamsFilter implements ITeamsFiltering{
 
 	@Override
 	public ArrayList<Team> filterTeamsToSizeByGender(ArrayList<Team> teams, int malesRequired, int femalesRequired) {
-		// TODO Auto-generated method stub
-		return null;
+		teams = teamTrimmer.trimTeamsToSizeByGender(teams, malesRequired, femalesRequired);
+		for(Team team : teams) 
+		{
+			team.calculateTeamTotalTime();
+			team.calculateTeamAverageTime(formatter);
+		}	
+		teams = teamSorter.sortByTotalTime(teams);
+		return teams;
 	}
 
 }
