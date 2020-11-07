@@ -102,12 +102,12 @@ public class GUI extends JFrame {
 		panel.add(btnChooseFile);
 		
 		JLabel lblSex = new JLabel("Sex:");
-		lblSex.setToolTipText("The number of competitors within a team");
+		lblSex.setToolTipText("");
 		lblSex.setBounds(31, 129, 34, 14);
 		panel.add(lblSex);
 		
 		JLabel lblM = new JLabel("M");
-		lblM.setToolTipText("The number of competitors within a team");
+		lblM.setToolTipText("");
 		lblM.setBounds(91, 129, 26, 14);
 		panel.add(lblM);
 		
@@ -118,7 +118,7 @@ public class GUI extends JFrame {
 		panel.add(spinnerMalesCount);
 		
 		JLabel lblF = new JLabel("|             F");
-		lblF.setToolTipText("The number of competitors within a team");
+		lblF.setToolTipText("");
 		lblF.setBounds(176, 129, 58, 14);
 		panel.add(lblF);
 		
