@@ -3,6 +3,7 @@ package user_interface;
 import java.awt.CardLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -104,13 +105,12 @@ public class GUI extends JFrame {
 			
 			try 
 			{
-				parsedTeams = FileUtilities.ParseCSVFile(choosenFile);
+				parsedTeams = FileUtilities.getTeamsFromFile(choosenFile);
 			} 
-			catch (FileNotFoundException fne) 
+			catch (IOException fne) 
 			{
 				fne.printStackTrace();
-				JOptionPane.showMessageDialog(GUI.this, "Chosen file does not exist or"
-						+ "\n" + "could not be opened!");
+				JOptionPane.showMessageDialog(GUI.this, "Error reading the input file. Check if file exists and make sure it's opened by another program.");
 				return;	
 			} 
 			catch (IllegalInputHeaderException iihe) 
@@ -122,6 +122,11 @@ public class GUI extends JFrame {
 			{
 				a.printStackTrace();
 				JOptionPane.showMessageDialog(GUI.this, "Error reading the input file. Check if the data format is correct.");
+				return;
+			}catch (Exception e)
+			{
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(GUI.this, "Unknown error occured reding the input file.");
 				return;
 			}
 			
