@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import contracts.ITimeFormatting;
-
 public class Team {
 
 	private String teamName;
@@ -111,7 +109,7 @@ public class Team {
 		return true;
 	}
 	
-	public boolean calculateTeamAverageTime(ITimeFormatting formatter) 
+	public boolean calculateTeamAverageTime() 
 	{
 		if(teamMembers.size() == 0)return false;
 		

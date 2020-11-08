@@ -32,7 +32,7 @@ public class ProcessDataAction extends AbstractAction {
 		TeamsSorter teamsSorter =  new TeamsSorter();
 		TimeFormatter formatter =  new TimeFormatter();
 		TeamsImporter importer =  new TeamsImporter(parser, sorter, handler);
-		TeamsFilter filter = new TeamsFilter(handler, teamsSorter, formatter);
+		TeamsFilter filter = new TeamsFilter(handler, teamsSorter);
 		TeamExporter exporter =  new TeamExporter(formatter);
 		
 		frame.processDataAction(importer, filter, exporter);
