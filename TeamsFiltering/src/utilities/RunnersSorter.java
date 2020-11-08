@@ -3,9 +3,10 @@ package utilities;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import contracts.IRunnerSorting;
 import data.Runner;
 
-public class RunnersSorter {
+public class RunnersSorter implements IRunnerSorting{
 	
 	public ArrayList<Runner> sortRunnersByTimeAscending(ArrayList<Runner> runners)
 	{

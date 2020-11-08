@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import utilities.DataUtilities;
+import contracts.ITimeFormatting;
 
 public class Team {
 
@@ -53,6 +53,38 @@ public class Team {
 		return true;
 	}
 	
+	public boolean TrimTeam(int malesRequired, int femalesRequired)
+	{
+		if(malesRequired + femalesRequired > teamMembers.size())return false;
+		
+		ArrayList<Runner> newTeam = new ArrayList<Runner>();
+		
+		
+		for(Runner runner : teamMembers)
+		{
+			if(runner.getGender().equals("M") && malesRequired > 0)
+			{
+				newTeam.add(runner);
+				malesRequired--;
+			}
+			
+			if(runner.getGender().equals("F") && femalesRequired > 0)
+			{
+				newTeam.add(runner);
+				femalesRequired--;
+			}
+			
+			if(malesRequired + femalesRequired == 0)
+			{
+				teamMembers = newTeam;
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
 	public void AddRunnerToTeam(Runner runner)
 	{
 		teamMembers.add(runner);
@@ -79,7 +111,7 @@ public class Team {
 		return true;
 	}
 	
-	public boolean calculateTeamAverageTime() 
+	public boolean calculateTeamAverageTime(ITimeFormatting formatter) 
 	{
 		if(teamMembers.size() == 0)return false;
 		
@@ -88,8 +120,7 @@ public class Team {
 		
 		//System.out.println("second before: " + calculatedAverageTime.getSecond());
 		//System.out.println("nano before: " + calculatedAverageTime.getNano());
-		
-		Duration calculatedAverageTime = DataUtilities.roundSeconds(dividedTotalTime);
+		Duration calculatedAverageTime = formatter.roundSeconds(dividedTotalTime);
 		
 		//System.out.println("second after: " + calculatedAverageTime.getSecond());
 		//System.out.println("nano after: " + calculatedAverageTime.getNano());
