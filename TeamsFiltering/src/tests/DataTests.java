@@ -287,6 +287,37 @@ public class DataTests {
 	}
 	
 	@Test
+	public void calculateTeamAverageTime_HmmssSSS_assertTotalTime()
+	{
+		Team team = new Team("Test team");
+		
+		team.AddRunnerToTeam(new Runner("Predrag", "Glavas", "SRB", "1998", 100, "Male", LocalTime.of(3, 22, 59, 232000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Goran", "Gagic", "SRB", "1998", 101, "Male", LocalTime.of(6, 59, 59, 143000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Stefan", "Djuric", "SRB", "1998", 105, "Male", LocalTime.of(7, 59, 59, 450000000), "Test team"));
+		
+		team.calculateTeamTotalTime();
+		team.calculateTeamAverageTime();
+		Duration expectedAverage =  Duration.between(LocalTime.MIDNIGHT, LocalTime.of(6, 7, 39, 275000000));
+		assertEquals(expectedAverage.compareTo(team.getAverageTime()), 0);
+	}
+	
+	@Test
+	public void calculateTeamAverageTime_HmmssSS_assertTotalTime()
+	{
+		Team team = new Team("Test team");
+		
+		team.AddRunnerToTeam(new Runner("Predrag", "Glavas", "SRB", "1998", 100, "Male", LocalTime.of(3, 22, 59, 550000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Goran", "Gagic", "SRB", "1998", 101, "Male", LocalTime.of(6, 59, 59, 140000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Stefan", "Djuric", "SRB", "1998", 105, "Male", LocalTime.of(7, 59, 59, 450000000), "Test team"));
+		
+		team.calculateTeamTotalTime();
+		team.calculateTeamAverageTime();
+		Duration expectedAverage =  Duration.between(LocalTime.MIDNIGHT, LocalTime.of(6, 7, 39, 380000000));
+		assertEquals(expectedAverage.compareTo(team.getAverageTime()), 0);
+	}
+	
+	
+	@Test
 	public void calculateTeamTotalTime_TotalTimeOver24h_assertTotalTime()
 	{
 		Team nenormalniTim = TeamsForTest.createNenormalniTeam();
