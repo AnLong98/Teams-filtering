@@ -16,12 +16,20 @@ import java.util.HashMap;
 
 import au.com.bytecode.opencsv.CSVReader;
 import contracts.IFileParsing;
+import contracts.ITimeParsing;
 import data.Runner;
 import exceptions.IllegalInputHeaderException;
 import utilities.FileUtilities.DATA_FIELDS;
 
 public class FileParser implements IFileParsing{
-	
+	private ITimeParsing timeParser;
+
+	public FileParser(ITimeParsing timeParser) {
+		super();
+		this.timeParser = timeParser;
+	}
+
+
 	public ArrayList<Runner> readRunnersFromFile(File file) throws IllegalInputHeaderException, IOException
 	{
 		ArrayList<Runner> runners = new ArrayList<Runner>();
@@ -170,27 +178,9 @@ public class FileParser implements IFileParsing{
 			}
 		}
 
-		try
-		{
-			localTime = LocalTime.parse(dataDict.get(DATA_FIELDS.CHIPTIME), DateTimeFormatter.ofPattern("H:mm:ss"));
-		}
-		catch(DateTimeParseException dtpe)
-		{
-			try
-			{
-				localTime = LocalTime.parse(dataDict.get(DATA_FIELDS.CHIPTIME), DateTimeFormatter.ofPattern("HH:mm:ss"));
-			}
-			catch(DateTimeParseException dtpe_2)
-			{
-				//This probably means he is unqualified
-				return null;
-			}	
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		localTime = timeParser.parseChipTime(dataDict.get(DATA_FIELDS.CHIPTIME));		
+		if(localTime == null)return null;
+		Runner.setChipTimeFormat(timeParser.parseChipTimeFormat(dataDict.get(DATA_FIELDS.CHIPTIME)));//Znam da je lose, ali nisam smislio nista bolje a da ne refaktorisem dosta koda.
 		
 		Runner runner = new Runner(firstName,
 				lastName,

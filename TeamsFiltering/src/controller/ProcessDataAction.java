@@ -15,6 +15,7 @@ import utilities.TeamsHandler;
 import utilities.TeamsImporter;
 import utilities.TeamsSorter;
 import utilities.TimeFormatter;
+import utilities.TimeParser;
 
 public class ProcessDataAction extends AbstractAction {
 
@@ -24,7 +25,8 @@ public class ProcessDataAction extends AbstractAction {
 		JComponent c = (JComponent) e.getSource();
 		GUI frame = (GUI) SwingUtilities.getRoot(c);
 		
-		FileParser parser = new FileParser();
+		TimeParser timeParser = new TimeParser();
+		FileParser parser = new FileParser(timeParser);
 		RunnersSorter sorter = new RunnersSorter();
 		TeamsHandler handler = new TeamsHandler();
 		TeamsSorter teamsSorter =  new TeamsSorter();

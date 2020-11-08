@@ -255,7 +255,7 @@ public class DataTests {
 		
 		team.calculateTeamAverageTime(formatter);
 		
-		assertEquals(LocalTime.parse("02:20:35").toSecondOfDay(), team.getAverageTime().getSeconds());
+		assertEquals(LocalTime.parse("02:20:34").toSecondOfDay(), team.getAverageTime().getSeconds());
 	}
 	
 	@Test
@@ -273,7 +273,7 @@ public class DataTests {
 		Team nenormalniTim = TeamsForTest.createNenormalniTeam();
 
 		
-		assertEquals( Duration.parse("PT13H30M16.0S").getSeconds(), nenormalniTim.getAverageTime().getSeconds()); //Average time is 13 hours 30 minutes 16 seconds
+		assertEquals( Duration.parse("PT13H30M15.0S").getSeconds(), nenormalniTim.getAverageTime().getSeconds()); //Average time is 13 hours 30 minutes 15 seconds
 	}
 
 }
