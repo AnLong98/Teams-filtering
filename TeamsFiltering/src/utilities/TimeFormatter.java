@@ -20,22 +20,29 @@ public class TimeFormatter implements ITimeFormatting{
 	}
 
 	@Override
-	public String formatCSVOutputTime(Duration duration) {
+	public String formatCSVOutputTime(Duration duration, String format) {
+		if(!format.contains("S"))
+		{
+			duration = roundSeconds(duration);
+		}
+		
 		long secondsDuration = Math.abs(duration.getSeconds());
 		long hours = secondsDuration / 3600;
 		long minutes = (secondsDuration % 3600) / 60;
 		long seconds = secondsDuration % 60;
+		long millis = Math.abs(duration.getNano() / 1000000 );
 		
 		String formattedTime = "";
-		String delmiter = ":";
+		String delimiter = ":";
+		String delimiterMillis = ".";
 		
-		if(hours < 10)
+		if(hours < 10 && format.startsWith("HH"))
 		{
 			formattedTime += "0";
 		}
 
 		formattedTime += String.valueOf(hours);
-		formattedTime += delmiter;
+		formattedTime += delimiter;
 		
 		if(minutes < 10)
 		{
@@ -43,7 +50,7 @@ public class TimeFormatter implements ITimeFormatting{
 		}
 		
 		formattedTime += String.valueOf(minutes);
-		formattedTime += delmiter;
+		formattedTime += delimiter;
 		
 		if(seconds < 10)
 		{
@@ -51,6 +58,22 @@ public class TimeFormatter implements ITimeFormatting{
 		}
 
 		formattedTime += String.valueOf(seconds);
+		
+		if(format.endsWith("SSS"))
+		{
+			formattedTime += delimiterMillis;
+			formattedTime += Long.toString(millis);
+			
+		}else if(format.endsWith("SS"))
+		{
+			formattedTime += delimiterMillis;
+			formattedTime += Long.toString(millis).substring(0, 2);
+			
+		}else if(format.endsWith("S"))
+		{
+			formattedTime += delimiterMillis;
+			formattedTime += Long.toString(millis).substring(0, 1);
+		}
 		
 		return formattedTime;
 	}

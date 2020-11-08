@@ -63,12 +63,13 @@ public class TeamExporter implements ITeamsExporting{
 	
 	public ArrayList<String[]> getCSVDataFromTeam(Team team, int place)
 	{
+		String timeFormat = Runner.getChipTimeFormat();
 		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();	
         boolean firstRunnerInTeam = true;
     	
         String placeStr = String.valueOf(place);
-    	String avgTimeStr = timeFormatter.formatCSVOutputTime(team.getAverageTime());
-    	String totalTimeStr = timeFormatter.formatCSVOutputTime(team.getTotalTime());
+    	String avgTimeStr = timeFormatter.formatCSVOutputTime(team.getAverageTime(), timeFormat);
+    	String totalTimeStr = timeFormatter.formatCSVOutputTime(team.getTotalTime(), timeFormat);
         
         for(Runner runner: team.getTeamMembers())
         {
@@ -85,7 +86,7 @@ public class TeamExporter implements ITeamsExporting{
         	
         	String[] csvString = { placeStr, String.valueOf(runner.getBib_number()),
         			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-        			runner.getState(), team.getTeamName(), timeFormatter.formatCSVOutputTime(Duration.between(LocalTime.MIDNIGHT, runner.getChipTime())),
+        			runner.getState(), team.getTeamName(), timeFormatter.formatCSVOutputTime(Duration.between(LocalTime.MIDNIGHT, runner.getChipTime()), timeFormat),
         			avgTimeStr, totalTimeStr };
         	
         	csvTeamData.add(csvString);	
