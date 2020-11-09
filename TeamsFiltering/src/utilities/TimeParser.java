@@ -7,7 +7,7 @@ import java.time.format.ResolverStyle;
 import contracts.ITimeParsing;
 
 public class TimeParser implements ITimeParsing{
-	private static final String[] supportedFormats = {"H:mm:ss", "HH:mm:ss", "HH:mm:ss.S", "HH:mm:ss.SS", "HH:mm:ss.SSS", "H:mm:ss.S", "H:mm:ss.SS", "H:mm:ss.SSS"};
+	private static final String[] supportedFormats = {"HH:mm:ss.SSS", "H:mm:ss.SSS", "HH:mm:ss.SS", "H:mm:ss.SS", "HH:mm:ss.S", "H:mm:ss.S", "HH:mm:ss",  "H:mm:ss"};
 
 	@Override
 	public LocalTime parseChipTime(String timeString) {

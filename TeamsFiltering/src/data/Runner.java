@@ -2,7 +2,7 @@ package data;
 import java.time.LocalTime;
 public class Runner {
 	
-	private static String chipTimeFormat = " ";
+	private static String chipTimeFormat = "";
 	private String firstName, lastName, state, gender, yob, teamName;
 	private int bib_number;
 	private LocalTime chipTime;
