@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -19,6 +20,7 @@ import utilities.TimeParser;
 
 public class ProcessDataAction extends AbstractAction {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -35,7 +37,9 @@ public class ProcessDataAction extends AbstractAction {
 		TeamsFilter filter = new TeamsFilter(handler, teamsSorter);
 		TeamExporter exporter =  new TeamExporter(formatter);
 		
+		frame.setCursor(Cursor.WAIT_CURSOR);
 		frame.processDataAction(importer, filter, exporter);
+		frame.setCursor(Cursor.DEFAULT_CURSOR);
 	}
 
 }
