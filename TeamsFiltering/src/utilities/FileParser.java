@@ -180,7 +180,10 @@ public class FileParser implements IFileParsing{
 
 		localTime = timeParser.parseChipTime(dataDict.get(DATA_FIELDS.CHIPTIME));		
 		if(localTime == null)return null;
-		Runner.setChipTimeFormat(timeParser.parseChipTimeFormat(dataDict.get(DATA_FIELDS.CHIPTIME)));//Znam da je lose, ali nisam smislio nista bolje a da ne refaktorisem dosta koda.
+		if(Runner.getChipTimeFormat().isEmpty())
+		{	
+			Runner.setChipTimeFormat(timeParser.parseChipTimeFormat(dataDict.get(DATA_FIELDS.CHIPTIME)));//Znam da je lose, ali nisam smislio nista bolje a da ne refaktorisem dosta koda.
+		}
 		
 		Runner runner = new Runner(firstName,
 				lastName,
