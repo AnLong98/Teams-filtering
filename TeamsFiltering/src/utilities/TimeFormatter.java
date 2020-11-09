@@ -6,26 +6,45 @@ import contracts.ITimeFormatting;
 
 public class TimeFormatter implements ITimeFormatting{
 	private static int nanoBound = 500000000;
+	private static final int nanoDecimals = 9;
 
 	@Override
-	public Duration roundSeconds(Duration time) {
-		if (time.getNano() >= nanoBound) 
+	public Duration roundTime(Duration time, int decimalsToHave) {
+		int nanoSeconds = time.getNano();
+		if (decimalsToHave == 0 && nanoSeconds >= nanoBound) 
 		{
 			time = time.plusSeconds(1);
+			time = time.minusNanos(time.getNano());
+			return time;
+		
+		}
+		
+		int excessDecimalsMask  = (int)Math.pow(10, nanoDecimals - decimalsToHave - 1);
+		nanoSeconds = nanoSeconds / excessDecimalsMask; 
+		int decidingDecimal = nanoSeconds % 10;
+		nanoSeconds /= 10;
+		excessDecimalsMask *= 10;
+		if(decidingDecimal >= 5)
+		{
+			nanoSeconds += 1;
+		}
+		
+		if(nanoSeconds >= Math.pow(10, decimalsToHave + 1))
+		{
+			time = time.plusSeconds(1);
+			time = time.minusNanos(time.getNano());
+			return time;
 		}
 		
 		time = time.minusNanos(time.getNano());
+		time = time.plusNanos(nanoSeconds * excessDecimalsMask);
+		
 		return time;
 		
 	}
 
 	@Override
 	public String formatCSVOutputTime(Duration duration, String format) {
-		if(!format.contains("S"))
-		{
-			duration = roundSeconds(duration);
-		}
-		
 		long secondsDuration = Math.abs(duration.getSeconds());
 		long hours = secondsDuration / 3600;
 		long minutes = (secondsDuration % 3600) / 60;

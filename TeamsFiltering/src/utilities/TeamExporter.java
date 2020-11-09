@@ -64,11 +64,25 @@ public class TeamExporter implements ITeamsExporting{
 	public ArrayList<String[]> getCSVDataFromTeam(Team team, int place)
 	{
 		String timeFormat = Runner.getChipTimeFormat();
+		int decimalsToHave = 0;
+		if(timeFormat.endsWith("SSS"))
+		{
+			decimalsToHave = 3;
+			
+		}else if(timeFormat.endsWith("SS"))
+		{
+			decimalsToHave = 2;
+			
+		}else if(timeFormat.endsWith("S"))
+		{
+			decimalsToHave = 1;
+		}
 		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();	
         boolean firstRunnerInTeam = true;
     	
+        Duration avgTime = timeFormatter.roundTime(team.getAverageTime(), decimalsToHave);
         String placeStr = String.valueOf(place);
-    	String avgTimeStr = timeFormatter.formatCSVOutputTime(team.getAverageTime(), timeFormat);
+    	String avgTimeStr = timeFormatter.formatCSVOutputTime(avgTime, timeFormat);
     	String totalTimeStr = timeFormatter.formatCSVOutputTime(team.getTotalTime(), timeFormat);
         
         for(Runner runner: team.getTeamMembers())

@@ -4,6 +4,6 @@ import java.time.Duration;
 
 public interface ITimeFormatting {
 
-	public Duration roundSeconds(Duration time);
+	public Duration roundTime(Duration time, int decimalsToHave);
 	public String formatCSVOutputTime(Duration duration, String format);
 }
