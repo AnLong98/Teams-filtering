@@ -78,20 +78,23 @@ public class TimeFormatter implements ITimeFormatting{
 
 		formattedTime += String.valueOf(seconds);
 		
+		String millisString = Long.toString(millis);
+		if(millis == 0)millisString = "000";
+		
 		if(format.endsWith("SSS"))
 		{
 			formattedTime += delimiterMillis;
-			formattedTime += Long.toString(millis);
+			formattedTime += millisString;
 			
 		}else if(format.endsWith("SS"))
 		{
 			formattedTime += delimiterMillis;
-			formattedTime += Long.toString(millis).substring(0, 2);
+			formattedTime += millisString.substring(0, 2);
 			
 		}else if(format.endsWith("S"))
 		{
 			formattedTime += delimiterMillis;
-			formattedTime += Long.toString(millis).substring(0, 1);
+			formattedTime += millisString.substring(0, 1);
 		}
 		
 		return formattedTime;

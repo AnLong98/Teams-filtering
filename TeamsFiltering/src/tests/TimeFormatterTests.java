@@ -129,6 +129,19 @@ public class TimeFormatterTests {
 	}
 	
 	@Test
+	public void roundTime_NoMillis_returnsRounded()
+	{
+		Duration timeToRound = Duration.ofMillis(0); // 10:00:00.00
+		timeToRound = timeToRound.plusMinutes(0);
+		timeToRound = timeToRound.plusHours(10);
+		
+		Duration returnValue = formatter.roundTime(timeToRound, 2);
+		
+		assertEquals(0, returnValue.getNano());
+		assertEquals(10 * 60 * 60, returnValue.getSeconds());
+	}
+	
+	@Test
 	public void formatCSVOutputTime_singleDigitValues__assertContent()
 	{
 		LocalTime parsedTime = LocalTime.parse("03:05:09");
@@ -136,6 +149,18 @@ public class TimeFormatterTests {
 		
 		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss");
 		String expectedValue = "03:05:09";
+		
+		assertEquals(expectedValue, returnValue);
+	}
+	
+	@Test
+	public void formatCSVOutputTime_noMillis__assertContent()
+	{
+		LocalTime parsedTime = LocalTime.parse("03:05:09");
+		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
+		
+		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SS");
+		String expectedValue = "03:05:09.00";
 		
 		assertEquals(expectedValue, returnValue);
 	}

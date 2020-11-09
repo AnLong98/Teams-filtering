@@ -20,7 +20,7 @@ public class TimeParser implements ITimeParsing{
 				return localTime;
 			}catch(Exception ex)
 			{
-				ex.printStackTrace();
+
 			}
 			
 		}
@@ -38,7 +38,7 @@ public class TimeParser implements ITimeParsing{
 				return format;
 			}catch(Exception ex)
 			{
-				ex.printStackTrace();
+
 			}
 			
 		}
