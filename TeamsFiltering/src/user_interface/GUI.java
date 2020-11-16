@@ -68,7 +68,7 @@ public class GUI extends JFrame {
 		
 		spinnerRunnerCount = new JSpinner();
 		spinnerRunnerCount.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
-		spinnerRunnerCount.setBounds(216, 74, 68, 20);
+		spinnerRunnerCount.setBounds(244, 74, 40, 20);
 		spinnerRunnerCount.addChangeListener(new RunnersSpinnerChangeListener());
 		panel.add(spinnerRunnerCount);
 		
