@@ -33,6 +33,7 @@ import data.Team;
 import exceptions.IllegalInputHeaderException;
 import utilities.FileUtilities;
 import javax.swing.SpinnerListModel;
+import java.awt.Font;
 
 public class GUI extends JFrame {
 
@@ -49,6 +50,7 @@ public class GUI extends JFrame {
 	 * Create the application.
 	 */
 	public GUI() {
+		setFont(new Font("Dialog", Font.BOLD, 12));
 		initialize();
 	}
 
@@ -58,7 +60,7 @@ public class GUI extends JFrame {
 	private void initialize() {
 		setResizable(false);
 		setTitle("Hronometar Team Filtering");
-		setBounds(100, 100, 477, 193);
+		setBounds(100, 100, 468, 193);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -67,63 +69,74 @@ public class GUI extends JFrame {
 		panel.setLayout(null);
 		
 		spinnerRunnerCount = new JSpinner();
+		spinnerRunnerCount.setFont(new Font("Tahoma", Font.BOLD, 11));
 		spinnerRunnerCount.setModel(new SpinnerNumberModel(new Integer(2), new Integer(2), null, new Integer(1)));
 		spinnerRunnerCount.setBounds(244, 74, 40, 20);
 		spinnerRunnerCount.addChangeListener(new RunnersSpinnerChangeListener());
 		panel.add(spinnerRunnerCount);
 		
 		lblRunnerCount = new JLabel("Number of competitors:");
+		lblRunnerCount.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblRunnerCount.setToolTipText("The number of competitors within a team");
 		lblRunnerCount.setBounds(31, 77, 148, 14);
 		panel.add(lblRunnerCount);
 		
 		lblInputFileName = new JLabel("Input file:");
+		lblInputFileName.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblInputFileName.setToolTipText("Click the Browse button to browse the input file");
 		lblInputFileName.setBounds(32, 31, 68, 14);
 		panel.add(lblInputFileName);
 		
 		btnProcessData = new JButton("Process");
+		btnProcessData.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnProcessData.addActionListener(new ProcessDataAction());
 		btnProcessData.setToolTipText("Click here for data processing");
 
-		btnProcessData.setBounds(318, 125, 125, 23);
+		btnProcessData.setBounds(318, 125, 118, 23);
 		panel.add(btnProcessData);
 		
 		txtFieldInputFileName = new JTextField();
+		txtFieldInputFileName.setFont(new Font("Tahoma", Font.BOLD, 11));
 		txtFieldInputFileName.setEditable(false);
 		txtFieldInputFileName.setBounds(110, 28, 174, 20);
 		panel.add(txtFieldInputFileName);
 		txtFieldInputFileName.setColumns(10);
 		
 		btnChooseFile = new JButton("Browse");
+		btnChooseFile.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnChooseFile.addActionListener(new ChooseFileAction());
 		btnChooseFile.setToolTipText("Click here to browse a file to process");
 		btnChooseFile.setBounds(319, 27, 117, 23);
 		panel.add(btnChooseFile);
 		
 		JLabel lblSex = new JLabel("Sex:");
+		lblSex.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblSex.setToolTipText("");
 		lblSex.setBounds(31, 129, 34, 14);
 		panel.add(lblSex);
 		
 		JLabel lblM = new JLabel("M");
-		lblM.setToolTipText("");
-		lblM.setBounds(91, 129, 26, 14);
+		lblM.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblM.setToolTipText("The number of male competitors within a team");
+		lblM.setBounds(103, 129, 24, 14);
 		panel.add(lblM);
 		
 		spinnerMalesCount = new JSpinner();
+		spinnerMalesCount.setFont(new Font("Tahoma", Font.BOLD, 11));
 		spinnerMalesCount.setModel(new SpinnerCircularListModel(new String[] {"-", "0", "1", "2"}));
 		spinnerMalesCount.setBounds(127, 126, 39, 20);
 		spinnerMalesCount.addChangeListener(new MaleSpinnerChangeListener());
 		panel.add(spinnerMalesCount);
 		
-		JLabel lblF = new JLabel("|             F");
-		lblF.setToolTipText("");
-		lblF.setBounds(176, 129, 58, 14);
+		JLabel lblF = new JLabel("         F");
+		lblF.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblF.setToolTipText("The number of female competitors within a team");
+		lblF.setBounds(194, 129, 40, 14);
 		panel.add(lblF);
 		
 		spinnerFemalesCount = new JSpinner();
-		spinnerFemalesCount.setModel(new SpinnerCircularListModel(new String[] {"-", "0", "1", "2"}));
+		spinnerFemalesCount.setFont(new Font("Tahoma", Font.BOLD, 11));
+		spinnerFemalesCount.setModel(new SpinnerListModel(new String[] {"-", "0", "1", "2"}));
 		spinnerFemalesCount.setBounds(244, 126, 39, 20);
 		spinnerFemalesCount.addChangeListener(new FemaleSpinnerChangeListener());
 		panel.add(spinnerFemalesCount);
