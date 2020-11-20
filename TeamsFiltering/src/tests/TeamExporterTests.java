@@ -3,6 +3,8 @@ package tests;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import org.junit.Test;
+
+import data.Runner;
 import data.Team;
 import utilities.TeamsForTest;
 import utilities.TeamsSorter;
@@ -35,6 +37,7 @@ public class TeamExporterTests {
 	@Test
 	public void getCSVDataFromTeam_testTeam_assertContent()
 	{
+		Runner.setChipTimeFormat("HH:mm:ss");
 		Team team1 = TeamsForTest.createPedjaTeam();
 		int place = 1;
 		

@@ -1,10 +1,8 @@
 package data;
-
 import java.time.LocalTime;
-
 public class Runner {
 	
-	
+	private static String chipTimeFormat = "";
 	private String firstName, lastName, state, gender, yob, teamName;
 	private int bib_number;
 	private LocalTime chipTime;
@@ -74,6 +72,14 @@ public class Runner {
 
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
+	}
+
+	public static String getChipTimeFormat() {
+		return chipTimeFormat;
+	}
+
+	public static void setChipTimeFormat(String chipTimeFormat) {
+		Runner.chipTimeFormat = chipTimeFormat;
 	}
 
 }

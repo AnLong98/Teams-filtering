@@ -11,13 +11,11 @@ import data.Team;
 public class TeamsFilter implements ITeamsFiltering{
 	private ITeamTrimming teamTrimmer;
 	private ITeamSorting teamSorter;
-	private ITimeFormatting formatter;
 	
-	public TeamsFilter(ITeamTrimming teamTrimmer, ITeamSorting teamSorter, ITimeFormatting formatter) {
+	public TeamsFilter(ITeamTrimming teamTrimmer, ITeamSorting teamSorter) {
 		super();
 		this.teamTrimmer = teamTrimmer;
 		this.teamSorter = teamSorter;
-		this.formatter = formatter;
 	}
 	
 	@Override
@@ -26,7 +24,7 @@ public class TeamsFilter implements ITeamsFiltering{
 		for(Team team : teams) 
 		{
 			team.calculateTeamTotalTime();
-			team.calculateTeamAverageTime(formatter);
+			team.calculateTeamAverageTime();
 		}	
 		teams = teamSorter.sortByTotalTime(teams);
 		return teams;
@@ -38,7 +36,7 @@ public class TeamsFilter implements ITeamsFiltering{
 		for(Team team : teams) 
 		{
 			team.calculateTeamTotalTime();
-			team.calculateTeamAverageTime(formatter);
+			team.calculateTeamAverageTime();
 		}	
 		teams = teamSorter.sortByTotalTime(teams);
 		return teams;

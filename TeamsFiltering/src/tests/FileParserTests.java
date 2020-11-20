@@ -12,9 +12,10 @@ import data.Runner;
 import utilities.FileParser;
 import utilities.FileUtilities;
 import utilities.FileUtilities.DATA_FIELDS;
+import utilities.TimeParser;
 
 public class FileParserTests {
-	private FileParser parser =  new FileParser();
+	private FileParser parser =  new FileParser(new TimeParser());
 	private static HashMap<DATA_FIELDS, String> dataDict;
 	
 	@BeforeClass

@@ -63,12 +63,27 @@ public class TeamExporter implements ITeamsExporting{
 	
 	public ArrayList<String[]> getCSVDataFromTeam(Team team, int place)
 	{
+		String timeFormat = Runner.getChipTimeFormat();
+		int decimalsToHave = 0;
+		if(timeFormat.endsWith("SSS"))
+		{
+			decimalsToHave = 3;
+			
+		}else if(timeFormat.endsWith("SS"))
+		{
+			decimalsToHave = 2;
+			
+		}else if(timeFormat.endsWith("S"))
+		{
+			decimalsToHave = 1;
+		}
 		ArrayList<String[]> csvTeamData= new ArrayList<String[]>();	
         boolean firstRunnerInTeam = true;
     	
+        Duration avgTime = timeFormatter.roundTime(team.getAverageTime(), decimalsToHave);
         String placeStr = String.valueOf(place);
-    	String avgTimeStr = timeFormatter.formatCSVOutputTime(team.getAverageTime());
-    	String totalTimeStr = timeFormatter.formatCSVOutputTime(team.getTotalTime());
+    	String avgTimeStr = timeFormatter.formatCSVOutputTime(avgTime, timeFormat);
+    	String totalTimeStr = timeFormatter.formatCSVOutputTime(team.getTotalTime(), timeFormat);
         
         for(Runner runner: team.getTeamMembers())
         {
@@ -85,7 +100,7 @@ public class TeamExporter implements ITeamsExporting{
         	
         	String[] csvString = { placeStr, String.valueOf(runner.getBib_number()),
         			runner.getFirstName(), runner.getLastName(), runner.getGender(), runner.getYob(), 
-        			runner.getState(), team.getTeamName(), timeFormatter.formatCSVOutputTime(Duration.between(LocalTime.MIDNIGHT, runner.getChipTime())),
+        			runner.getState(), team.getTeamName(), timeFormatter.formatCSVOutputTime(Duration.between(LocalTime.MIDNIGHT, runner.getChipTime()), timeFormat),
         			avgTimeStr, totalTimeStr };
         	
         	csvTeamData.add(csvString);	

@@ -17,9 +17,10 @@ import utilities.FileParser;
 import utilities.RunnersSorter;
 import utilities.TeamsHandler;
 import utilities.TeamsImporter;
+import utilities.TimeParser;
 
 public class TeamsImporterTests {
-	private TeamsImporter importer =  new TeamsImporter(new FileParser(), new RunnersSorter(), new TeamsHandler());
+	private TeamsImporter importer =  new TeamsImporter(new FileParser(new TimeParser()), new RunnersSorter(), new TeamsHandler());
 
 	@Test
 	public void parseCSVFile_fileWith44Teams_assertTeamCount()

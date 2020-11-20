@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import contracts.ITimeFormatting;
-
 public class Team {
 
 	private String teamName;
@@ -111,23 +109,12 @@ public class Team {
 		return true;
 	}
 	
-	public boolean calculateTeamAverageTime(ITimeFormatting formatter) 
+	public boolean calculateTeamAverageTime() 
 	{
 		if(teamMembers.size() == 0)return false;
 		
 		Duration dividedTotalTime = this.totalTime.dividedBy(this.getTeamMembers().size());
-		//LocalTime calculatedAverageTime = LocalTime.ofNanoOfDay(dividedTotalTime.toNanos());
-		
-		//System.out.println("second before: " + calculatedAverageTime.getSecond());
-		//System.out.println("nano before: " + calculatedAverageTime.getNano());
-		Duration calculatedAverageTime = formatter.roundSeconds(dividedTotalTime);
-		
-		//System.out.println("second after: " + calculatedAverageTime.getSecond());
-		//System.out.println("nano after: " + calculatedAverageTime.getNano());
-		
-		this.setAverageTime(calculatedAverageTime);
-		
-		//System.out.println("Team average time: " + this.getAverageTime());
+		this.setAverageTime(dividedTotalTime);
 		
 		return true;
 	}
