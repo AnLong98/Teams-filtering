@@ -1,16 +1,20 @@
 package utilities;
 
+import java.awt.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -129,8 +133,16 @@ public class FileParser implements IFileParsing{
 	
 	public Runner parseRunnerFromDataDict(HashMap<DATA_FIELDS, String> dataDict)
 	{
-		SimpleDateFormat formatLonger = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat formatShorter = new SimpleDateFormat("yyyy");
+		DateTimeFormatter formatLonger =  DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter reverseFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		DateTimeFormatter reverseFormatDashed = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateTimeFormatter formatShorter = new DateTimeFormatterBuilder()
+			     .appendPattern("yyyy")
+			     .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+			     .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+			     .toFormatter();
+		ArrayList<DateTimeFormatter> dobFormats =  new ArrayList<DateTimeFormatter>(Arrays.asList(formatLonger, reverseFormat, reverseFormatDashed, formatShorter));
+
 		LocalTime localTime;
 		String birthYear = "";
 		String sex;
@@ -159,24 +171,21 @@ public class FileParser implements IFileParsing{
     		return null;
     	}
 		
-		
-		try
-		{
-			Date date = formatLonger.parse(dataDict.get(DATA_FIELDS.DOB));
-			birthYear = formatShorter.format(date);
-		}
-		catch(Exception e)
+		for(DateTimeFormatter format : dobFormats)
 		{
 			try
 			{
-				birthYear = dataDict.get(DATA_FIELDS.DOB);
-			}
-			catch(Exception ex)
+				LocalDate localDate = LocalDate.parse(dataDict.get(DATA_FIELDS.DOB), format);
+				birthYear = String.valueOf(localDate.getYear()); //formatShorter.format(localDate);
+				break;
+			}catch(Exception ex)
 			{
-				//Totally illegal format, something is wrong
-				return null;
+				continue;
 			}
+			
 		}
+		
+		if(birthYear.isEmpty())return null;
 
 		localTime = timeParser.parseChipTime(dataDict.get(DATA_FIELDS.CHIPTIME));		
 		if(localTime == null)return null;

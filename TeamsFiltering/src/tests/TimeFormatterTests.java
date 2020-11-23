@@ -148,7 +148,7 @@ public class TimeFormatterTests {
 		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
 		
 		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss");
-		String expectedValue = "03:05:09";
+		String expectedValue = " 03:05:09";
 		
 		assertEquals(expectedValue, returnValue);
 	}
@@ -160,7 +160,43 @@ public class TimeFormatterTests {
 		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
 		
 		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SS");
-		String expectedValue = "03:05:09.00";
+		String expectedValue = " 03:05:09.00";
+		
+		assertEquals(expectedValue, returnValue);
+	}
+	
+	@Test
+	public void formatCSVOutputTime_MillisWithLeadingZeros__assertContent()
+	{
+		LocalTime parsedTime = LocalTime.of(3, 5, 9, 50000000);
+		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
+		
+		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SS");
+		String expectedValue = " 03:05:09.05";
+		
+		assertEquals(expectedValue, returnValue);
+	}
+	
+	@Test
+	public void formatCSVOutputTime_MillisWithTwoLeadingZeros__assertContent()
+	{
+		LocalTime parsedTime = LocalTime.of(3, 5, 9, 5000000);
+		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
+		
+		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SSS");
+		String expectedValue = " 03:05:09.005";
+		
+		assertEquals(expectedValue, returnValue);
+	}
+	
+	@Test
+	public void formatCSVOutputTime_MillisWithLeadingZero__assertContent()
+	{
+		LocalTime parsedTime = LocalTime.of(3, 5, 9, 53000000);
+		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
+		
+		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SSS");
+		String expectedValue = " 03:05:09.053";
 		
 		assertEquals(expectedValue, returnValue);
 	}
@@ -172,7 +208,7 @@ public class TimeFormatterTests {
 		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
 		
 		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.S");
-		String expectedValue = "03:05:09.1";
+		String expectedValue = " 03:05:09.1";
 		
 		assertEquals(expectedValue, returnValue);
 	}
@@ -184,7 +220,7 @@ public class TimeFormatterTests {
 		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
 		
 		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SS");
-		String expectedValue = "03:05:09.10";
+		String expectedValue = " 03:05:09.10";
 		
 		assertEquals(expectedValue, returnValue);
 	}
@@ -196,7 +232,7 @@ public class TimeFormatterTests {
 		Duration timeToRound = Duration.between(LocalTime.MIDNIGHT, parsedTime);
 		
 		String returnValue = formatter.formatCSVOutputTime(timeToRound, "HH:mm:ss.SSS");
-		String expectedValue = "12:05:09.123";
+		String expectedValue = " 12:05:09.123";
 		
 		assertEquals(expectedValue, returnValue);
 	}

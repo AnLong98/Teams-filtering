@@ -188,6 +188,21 @@ public class DataTests {
 	}
 	
 	@Test
+	public void calculateTeamTotalTime_HmmssSSBug_assertTotalTime()
+	{
+		Team team = new Team("Test team");
+		
+		team.AddRunnerToTeam(new Runner("Predrag", "Glavas", "SRB", "1998", 100, "Male", LocalTime.of(1, 31, 10, 800000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Goran", "Gagic", "SRB", "1998", 101, "Male", LocalTime.of(2, 05, 47, 880000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Stefan", "Djuric", "SRB", "1998", 105, "Male", LocalTime.of(2, 14, 21, 600000000), "Test team"));
+		team.AddRunnerToTeam(new Runner("Ksenija", "Doroslovacki", "SRB", "1998", 105, "Female", LocalTime.of(2, 14, 22, 260000000), "Test team"));
+
+		team.calculateTeamTotalTime();
+		Duration expectedTotal =  Duration.between(LocalTime.MIDNIGHT, LocalTime.of(8, 5, 42, 540000000));
+		assertEquals(expectedTotal.compareTo(team.getTotalTime()), 0);
+	}
+	
+	@Test
 	public void calculateTeamTotalTime_teamMembers_assertTotalTime()
 	{
 		Team team = new Team("Test team");

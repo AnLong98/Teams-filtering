@@ -179,6 +179,35 @@ public class FileParserTests {
 	}
 	
 	@Test
+	public void parseRunnerFromDataDict_yyyymmddDateFormat_parsesBirthYear()
+	{
+		dataDict.replace(DATA_FIELDS.DOB, "1998/05/03");
+		dataDict.replace(DATA_FIELDS.CHIPTIME, "03:20:52");
+		
+		String expectedBirthYear = "1998";
+		Runner returnedValue = parser.parseRunnerFromDataDict(dataDict);
+		
+		String returnedYear = returnedValue.getYob();
+		
+		assertEquals(expectedBirthYear, returnedYear);
+	}
+	
+	@Test
+	public void parseRunnerFromDataDict_yyyymmddDashedDateFormat_parsesBirthYear()
+	{
+		dataDict.replace(DATA_FIELDS.DOB, "1998-05-03");
+		dataDict.replace(DATA_FIELDS.CHIPTIME, "03:20:52");
+		
+		String expectedBirthYear = "1998";
+		Runner returnedValue = parser.parseRunnerFromDataDict(dataDict);
+		
+		String returnedYear = returnedValue.getYob();
+		
+		assertEquals(expectedBirthYear, returnedYear);
+	}
+	
+	
+	@Test
 	public void parseRunnerFromDataDict_yyyyDateFormat_parsesBirthYear()
 	{
 		dataDict.replace(DATA_FIELDS.DOB, "1998");
@@ -189,6 +218,18 @@ public class FileParserTests {
 		String returnedYear = returnedValue.getYob();
 		
 		assertEquals(expectedBirthYear, returnedYear);
+	}
+	
+	
+	@Test
+	public void parseRunnerFromDataDict_invalidDateFormat_parsesBirthYear()
+	{
+		dataDict.replace(DATA_FIELDS.DOB, "1998/25/11");
+		dataDict.replace(DATA_FIELDS.CHIPTIME, "03:20:52");
+		
+		Runner returnedValue = parser.parseRunnerFromDataDict(dataDict);
+		
+		assertNull(returnedValue);
 	}
 	
 	@Test

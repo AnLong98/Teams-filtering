@@ -51,7 +51,7 @@ public class TimeFormatter implements ITimeFormatting{
 		long seconds = secondsDuration % 60;
 		long millis = Math.abs(duration.getNano() / 1000000 );
 		
-		String formattedTime = "";
+		String formattedTime = " ";
 		String delimiter = ":";
 		String delimiterMillis = ".";
 		
@@ -77,8 +77,17 @@ public class TimeFormatter implements ITimeFormatting{
 		}
 
 		formattedTime += String.valueOf(seconds);
+		String millisString = "";
 		
-		String millisString = Long.toString(millis);
+		if(millis < 10)
+		{
+			millisString += "00";
+		}else if(millis < 100)
+		{
+			millisString += "0";
+		}
+		
+		millisString += Long.toString(millis);
 		if(millis == 0)millisString = "000";
 		
 		if(format.endsWith("SSS"))

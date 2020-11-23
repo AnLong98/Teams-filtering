@@ -96,7 +96,7 @@ public class GUI extends JFrame {
 		panel.add(btnProcessData);
 		
 		txtFieldInputFileName = new JTextField();
-		txtFieldInputFileName.setFont(new Font("Tahoma", Font.BOLD, 11));
+		txtFieldInputFileName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		txtFieldInputFileName.setEditable(false);
 		txtFieldInputFileName.setBounds(110, 28, 174, 20);
 		panel.add(txtFieldInputFileName);
@@ -179,7 +179,7 @@ public class GUI extends JFrame {
 			}catch (Exception e)
 			{
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(GUI.this, "Unknown error occured reding the input file.");
+				JOptionPane.showMessageDialog(GUI.this, "Unknown error occurred reading the input file.");
 				return;
 			}
 			

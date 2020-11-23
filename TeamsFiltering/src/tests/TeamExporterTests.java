@@ -44,10 +44,10 @@ public class TeamExporterTests {
 		ArrayList<String[]> csvData = exporter.getCSVDataFromTeam(team1, place);
 		
 		String[] receivedDataFirst  = csvData.get(0);
-		String[] expectedDataFirst = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Pedja team" , "02:20:32", "02:20:34", "09:22:14"};
+		String[] expectedDataFirst = {"1", "100","Predrag", "Glavaš", "M", "1998", "SRB", "Pedja team" , " 02:20:32", " 02:20:34", " 09:22:14"};
 		
 		String[] receivedDataSecond  = csvData.get(1);
-		String[] expectedDataSecond = {"", "101","Predragica", "Glavašica", "F", "1997", "SRB", "Pedja team" , "02:20:33", "", ""};
+		String[] expectedDataSecond = {"", "101","Predragica", "Glavašica", "F", "1997", "SRB", "Pedja team" , " 02:20:33", "", ""};
 		
 		assertEquals(expectedDataFirst[0], receivedDataFirst[0]);
 		assertEquals(expectedDataFirst[1], receivedDataFirst[1]);
